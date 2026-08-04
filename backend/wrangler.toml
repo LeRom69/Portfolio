@@ -11,5 +11,5 @@ id = "27731c3427044f0c85c794f4c34696d0"
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = "587"
 RECEIVER_EMAIL = "lera007691@gmail.com"
-CLIENT_ORIGIN = "http://localhost:3000"
+CLIENT_ORIGIN = "https://lerom69.github.io"
  
