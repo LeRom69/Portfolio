@@ -1,0 +1,445 @@
+/*////////////////////////////////////////////////////////*/
+
+.prototype {
+    padding: 41px calc(1.5 * (var(--gutter)));
+    padding-bottom: 0px;
+    padding-right: 0;
+}
+
+.prototype.video {
+    padding: 41px var(--gutter2);
+    padding-bottom: 30px;
+}
+
+.prototype-text {
+    padding: 0px var(--gutter3);
+}
+
+.section.showcase {
+    margin-top: 50px;
+}
+
+.sect-text.prototype {
+    width: 94%;
+    padding: 0px;
+    padding-bottom: 20px;
+    max-width: none;
+    margin-top: 10px;
+}
+
+.idea {
+    padding: 41px calc(1.5 * (var(--gutter)));
+    position: relative;
+}
+
+.prototype-subtitle {
+    padding-left: 0;
+}
+
+.prototype-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    /* оставляем как есть */
+    gap: 17px;
+}
+
+.prototype.video .prototype-flex .prototype-video-col {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.prototype.video .prototype-flex .prototype-video-slider {
+    width: 100%;
+    align-self: stretch;
+    /* высота = высоте .prototype-video-col */
+    display: flex;
+}
+
+.prototype-flex-main {
+    display: flex;
+    gap: 12px
+}
+
+.prototype-flex-main>* {
+    flex: 1;
+}
+
+.shadow.max-width {
+    width: 100%;
+}
+
+.prototype.video .prototype-flex>div:first-child {
+    order: 1;
+    width: 100%;
+}
+
+.prototype.video .prototype-flex>div:last-child {
+    order: 2;
+    width: 100%;
+}
+
+.prototype-flex> :first-child {
+    flex: 1;
+}
+
+.prototype-flex> :last-child {
+    flex: 1.246;
+}
+
+.res-flex {
+    display: flex;
+    gap: 32px;
+    padding: 20px calc(1.5 * (var(--gutter)));
+
+}
+
+.sect-text.idea {
+    max-width: 100%;
+    padding: 0;
+}
+
+
+.slides-container {
+    margin-top: 40px;
+    padding: 0 calc(1.5 * (var(--gutter)));
+    padding-bottom: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    white-space: pre-line;
+}
+
+.slides-container.slides {
+    margin-top: -30px;
+}
+
+.sect-subtitle.prototype-subtitle {
+    padding-left: 0;
+    padding-right: 0px;
+    padding-bottom: 30px;
+    white-space: pre-line;
+}
+
+.sect-subtitle.prototype-subtitle.video {
+    margin-top: 0px;
+
+}
+
+.sect-subtitle.slides-container {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    white-space: pre-line;
+}
+
+/*////////////////////////////////////////////////////*/
+
+/* IMG */
+
+/*////////////////////////////////////////////////////*/
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.image-card {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+        z-index: 1;
+}
+
+.image-card::before {
+    content: "";
+    position: absolute;
+
+    top: 24px;
+    left: -10px;
+
+    width: 100%;
+    height: 92%;
+
+    border-radius: 4px;
+    z-index: 0;
+
+    padding: 2px;
+
+    background: conic-gradient(from var(--angle),
+            #ffffff,
+            #020615 15%,
+            #020615 35%,
+            #ffffff 60%);
+
+    animation: rotateBorder 5s linear infinite;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* обёртка вокруг самой картинки */
+.image-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* анимированная рамка на самой картинке — свет бежит по кругу */
+.image-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+
+    border-radius: 4px;
+    padding: 2px;
+
+    background: conic-gradient(from var(--angle),
+            #020615,
+            rgba(255, 255, 255, 0.95) 15%,
+            #020615 30%);
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* блик, гуляющий по картинке */
+.image-inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    border-radius: 4px;
+
+    background: linear-gradient(120deg,
+            transparent 20%,
+            rgba(255, 255, 255, 0.3) 45%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 80%);
+    background-size: 250% 250%;
+    animation: liquidLightSheen 5s ease-in-out infinite;
+    mix-blend-mode: overlay;
+}
+
+.image-inner img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+@keyframes rotateBorder {
+    to {
+        --angle: 360deg;
+    }
+}
+
+.image-card.right::before {
+    content: "";
+    position: absolute;
+
+    top: 24px;
+    left: 6px;
+
+    width: 100%;
+    height: 92%;
+
+    border-radius: 4px;
+    z-index: 1;
+
+    padding: 2px;
+
+    background: conic-gradient(from var(--angle),
+            #ffffff,
+            #020615 15%,
+            #020615 35%,
+            #ffffff 60%);
+
+    animation: rotateBorder 5s linear infinite;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+
+.slides-container.prototype {
+    margin-top: -10px;
+    white-space: pre-line;
+}
+
+.card-video {
+    padding-top: 20px;
+    position: relative;
+    display: inline-block;
+    z-index: 999;
+    width: 100%;
+    /* было: calc(100% + 14px) */
+    /* margin-left убрать полностью */
+}
+
+.offer-icon {
+    width: 42px;
+    height: 48px;
+}
+
+.flex.prototype-flex {
+    padding: 20px 0px;
+}
+
+.sect-text.slides {
+    max-width: none;
+    width: 66%;
+    padding: 20px 0px;
+    padding-bottom: 0;
+    white-space: pre-line;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .prototype,
+    .idea {
+        padding: 30px calc(1.5 * (var(--gutter)));
+        padding-bottom: 0;
+        padding-right: 20px;
+    }
+
+    .prototype.video {
+        padding-right: 20px;
+        padding-bottom: 24px;
+    }
+
+    .prototype-text {
+        padding: 0px var(--gutter3);
+    }
+
+    .sect-text.prototype {
+        width: 100%;
+    }
+
+    .res-flex {
+        padding: 16px 0;
+    }
+
+    .slides-container {
+        padding: 0 24px;
+        padding-bottom: 16px;
+    }
+}
+
+@media (max-width: 980px) {
+
+    .prototype-flex,
+    .res-flex,
+    .prototype-flex-main {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .sect-text.prototype {
+        width: 100%;
+    }
+
+    /* На мобильном картинка идёт после текста */
+    .prototype-flex,
+    .prototype-flex-main .image-card {
+        order: 2;
+        width: 100%;
+    }
+
+    .prototype-flex>div:first-of-type {
+        order: 1;
+    }
+
+    /* Видео-секция: текст+видео первым, вертикальный слайдер — под видео */
+    .prototype.video .prototype-flex>div:first-child {
+        order: 1;
+        width: 100%;
+    }
+
+    .prototype.video .prototype-flex>div:last-child {
+        order: 2;
+        width: 100%;
+    }
+
+    /* iframe/video растягивается на всю ширину */
+    .card-video {
+        margin-left: 0;
+        width: 100%;
+        margin-bottom: 12px;
+    }
+
+    .card-video iframe,
+    .card-video video {
+        width: 100% !important;
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+
+    .image-card::before {
+        left: 0;
+        width: calc(100% - 4px);
+        top: 18px;
+    }
+
+    .image-card.right::before {
+        left: 0;
+        width: calc(100% - 4px);
+        top: 28px;
+    }
+
+    .sect-text.slides {
+        width: 100%;
+    }
+
+    .card-title {
+        margin-top: 2px;
+    }
+
+    p.card-desc {
+        margin: 8px 0;
+        margin-bottom: 16px;
+    }
+
+    /* Убираем max-height чтобы контент не обрезался */
+    .prototype {
+        max-height: none;
+        padding-bottom: 20px;
+    }
+
+    .slides-container {
+        z-index: 2;
+        position: relative;
+    }
+}
+
+@media (max-width: 500px) {
+    .prototype-text {
+        padding: 0px calc(0.6* (var(--gutter)));
+    }
+}

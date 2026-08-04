@@ -1,0 +1,258 @@
+/*grid.css*/
+
+:root {
+  /* Тот же кастомный делитель vw, что и в grid-vert.css и в JS-хуке.
+     Одно значение на весь проект — меняешь тут, меняй и в useAlignedGrid.js. */
+  --vw140: calc(100vw / 140);
+    --hole-size: 4px;
+--hole-mask:
+  radial-gradient(
+    circle,
+    #000 0,
+    #000 calc(var(--hole-size) - 1px),
+    transparent calc(var(--hole-size) - 1px)
+  );
+}
+
+/* =========================
+   🌐 GRID CONTAINER
+========================= */
+
+.grid {
+  position: absolute;
+  inset: 0;
+  top: -2px;
+  width: 100%;
+  height: stretch;
+  overflow: hidden;
+
+  pointer-events: auto;
+
+  /* Значения по умолчанию для первого рендера, ДО того как JS
+     (useAlignedGrid) пересчитает точные --cell/--edge под реальную
+     ширину контейнера. */
+  --cell: clamp(57.3px, calc(8 * var(--vw140)), 110px);
+  --edge: clamp(18px, calc(4.2 * var(--vw140)), 59px);
+  --half: calc(var(--cell) / 2);
+
+  --x: var(--px);
+  --y: var(--py);
+}
+
+
+/* =========================
+   🌌 BASE GRID
+========================= */
+.grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -5;
+
+  background-image:
+    linear-gradient(rgba(164, 164, 209, 0.353) 1px, transparent 2px),
+    linear-gradient(90deg, rgba(164, 164, 209, 0.353) 1px, transparent 2px),
+    linear-gradient(90deg, rgba(48, 48, 69, 0) 1px, transparent 2px);
+
+  background-size: var(--cell) var(--cell);
+  /* первая вертикальная/горизонтальная линия ровно на отступе контейнера */
+  background-position: var(--edge) 0;
+
+  animation: breathe 6s ease-in-out infinite;
+
+  /* ВАЖНО: порядок слоёв маски имеет значение для mask-composite.
+     subtract = source-out = alpha(слой2) * (1 - alpha(накопленного результата)).
+     Точки должны идти ПЕРВЫМ слоем (база), а виньетка — ВТОРЫМ
+     (то, что вычитается из базы). Если поменять местами — дырки
+     обнулятся именно там, где сетка видна, и станут невидимы. */
+mask-image:   radial-gradient(circle at center, black 90%, transparent 98%), /* верхний слой */
+  var(--hole-mask);
+
+  mask-size:
+    var(--cell) var(--cell),
+    100% 100%;
+
+  /* точки на пересечениях должны сдвигаться СИНХРОННО с линиями —
+     тот же var(--edge), что и в background-position выше, иначе
+     точки "отклеятся" от пересечений линий */
+  mask-position:
+    var(--edge) 1px,
+    0px 0px;
+
+  mask-repeat:
+    repeat,
+    no-repeat;
+
+  mask-composite:
+    add,
+    subtract;
+}
+
+/* =========================
+   🧿 GLOW
+========================= */
+.grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+
+  background-image:
+    linear-gradient(rgba(220, 240, 255, 1) 1px, transparent 2px),
+    linear-gradient(90deg, rgba(220, 240, 255, 1) 1px, transparent 2px);
+
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+
+  will-change: opacity, mask-position;
+
+   background-size: var(--cell) var(--cell);
+  /* первая вертикальная/горизонтальная линия ровно на отступе контейнера */
+  background-position: var(--edge) 0;
+
+  animation: breathe 6s ease-in-out infinite;
+
+  /* ВАЖНО: порядок слоёв маски имеет значение для mask-composite.
+     subtract = source-out = alpha(слой2) * (1 - alpha(накопленного результата)).
+     Точки должны идти ПЕРВЫМ слоем (база), а виньетка — ВТОРЫМ
+     (то, что вычитается из базы). Если поменять местами — дырки
+     обнулятся именно там, где сетка видна, и станут невидимы. */
+  mask-image:
+    radial-gradient(circle at var(--x) var(--y), black 0px, black 1px, transparent 400px),
+    var(--hole-mask);
+
+  mask-size:
+    100% 100%,   /* было var(--cell) var(--cell) — тоже нужно поменять, см. ниже */
+    100% 100%;
+
+  mask-position:
+    0 0,
+    0 0;
+
+  mask-repeat:
+    no-repeat,
+    repeat;
+
+  mask-composite:
+    source-in,
+    destination-out;
+
+  /* Было 2 drop-shadow, первый с alpha 0 — полностью невидимый, но всё равно
+     считается отдельным blur-проходом на каждый кадр breathe-анимации.
+     Оставили только реально видимый. */
+  filter: drop-shadow(0 0 18px rgba(120, 180, 255, 0.6));
+  will-change: opacity;
+  contain: paint;
+}
+
+.grid:hover::after {
+  opacity: 1;
+}
+
+.grid {
+  contain: paint;
+}
+
+/* =========================
+   ⚡ WAVE
+========================= */
+.wave-layer {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+  opacity: 0;
+
+  z-index: 9999;
+
+  background-image:
+    linear-gradient(rgb(255, 255, 255) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgb(255, 255, 255) 1.5px, transparent 1.5px);
+
+  background-size: var(--cell) var(--cell);
+  background-position: var(--edge) 0;
+
+  /* Было 2 drop-shadow — свели к одному, каждый лишний drop-shadow это
+     отдельный blur-проход, пересчитываемый на каждый кадр clip-path
+     анимации (а она сама по себе не compositor-only и уже недёшева). */
+  filter: drop-shadow(0 0 12px rgba(160, 220, 255, 0.95));
+
+  /* Здесь маска ОДНА (без composite), поэтому обычная семантика:
+     transparent = дырка, black = видимая часть.
+     Полярность точки тут ПРОТИВОПОЛОЖНА .grid::before/::after специально. */
+mask-image:
+  radial-gradient(circle at center, black 60%, transparent 100%), /* верхний слой */
+  var(--hole-mask);
+
+  mask-size:
+    var(--cell) var(--cell),
+    100% 100%;
+  mask-position:
+    var(--edge) 0,
+    0 0;
+  mask-repeat: repeat;
+}
+
+/* will-change только на время реальной анимации волны, а не постоянно —
+   постоянный will-change держал бы отдельный GPU-слой всё время, даже
+   когда волна не играет. Так браузер готовит слой ЗАРАНЕЕ, в момент
+   простановки класса .wave (до первого кадра clip-path), а не посреди
+   анимации. */
+.grid.wave .wave-layer {
+  animation: wave 1.2s ease-out forwards;
+  will-change: clip-path, opacity;
+}
+
+.grid::before,
+.grid::after,
+.wave-layer {
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* =========================
+   ⚡ WAVE ANIMATION
+========================= */
+@keyframes wave {
+  0% {
+    clip-path: circle(0px at var(--wx) var(--wy));
+    opacity: 1;
+  }
+
+  100% {
+    clip-path: circle(1800px at var(--wx) var(--wy));
+    opacity: 0;
+  }
+}
+
+/* =========================
+   🌬 BREATH
+========================= */
+@keyframes breathe {
+  0% { opacity: 0.75; }
+  50% { opacity: 1; }
+  100% { opacity: 0.75; }
+}
+
+/* =========================
+   RESPONSIVE / TOUCH
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .grid::before,
+  .grid::after {
+    animation: none;
+  }
+}
+
+@media (hover: none),
+(pointer: coarse) {
+  .grid::after {
+    display: none;
+  }
+  
+}

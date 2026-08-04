@@ -1,0 +1,63 @@
+/*
+  fog.css
+  
+  mask-image / mask-composite намеренно отсутствуют — они строятся
+  динамически в FogLayer.jsx через spotlightStore, чтобы поддерживать
+  произвольное количество одновременных Spotlight-дырок.
+
+  CSS-переменные --spotlight-x/y/r/strength/feather больше не нужны
+  и удалены. Управление туманом полностью на стороне JS.
+*/
+
+.fog-layer {
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+  z-index: 50;
+
+  background: radial-gradient(
+    circle at var(--x, 50vw) var(--y, 50vh),
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0.075) 120px,
+    rgb(0, 0, 0, 0.222) 220px,
+    rgba(0, 0, 0, 0.293) 260px,
+    rgba(0, 0, 0, 0.489) 500px,
+    rgba(0, 0, 0, 0.662) 900px
+  );
+
+  mix-blend-mode: multiply;
+
+  /*
+    Transition только для курсорной маски (--x/--y).
+    Spotlight-дырки обновляются напрямую через style в JS —
+    без transition, чтобы избежать "полёта" из -9999px при маунте.
+  */
+  transition: none;
+}
+
+/* noise */
+.fog-layer::after {
+  content: "";
+  position: absolute;
+  inset: -200px;
+
+  background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+
+  opacity: 0.08;
+
+  animation: fogMove 12s linear infinite;
+
+  mix-blend-mode: overlay;
+}
+
+@keyframes fogMove {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-60px, -40px); }
+  100% { transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fog-layer::after {
+    animation: none;
+  }
+}

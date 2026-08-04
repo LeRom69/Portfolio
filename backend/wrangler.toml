@@ -1,0 +1,15 @@
+name = "contact-form-backend"
+main = "server.js"
+compatibility_date = "2026-08-01"
+ 
+# namespace: wrangler kv namespace create RATE_LIMIT_KV
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "27731c3427044f0c85c794f4c34696d0"
+ 
+[vars]
+SMTP_HOST = "smtp.gmail.com"
+SMTP_PORT = "587"
+RECEIVER_EMAIL = "lera007691@gmail.com"
+CLIENT_ORIGIN = "http://localhost:3000"
+ 

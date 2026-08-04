@@ -1,0 +1,1136 @@
+.embla-vertical {
+  display: flex;
+  flex-direction: row;
+    align-items: center;
+  /* было center — меняем на stretch */
+  gap: 18px;
+  position: relative;
+  z-index: 999;
+  height: 100%;
+}
+
+/* === Главная карусель (ось Y, с масштабированием слайдов) === */
+.embla-vert {
+  height: 560px;
+  min-height: 0;
+}
+
+.embla__viewport-vert {
+  overflow: hidden;
+  height: 100%;
+  border-radius: 11px;
+}
+
+.embla__container-vert {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  touch-action: pan-x pinch-zoom;
+}
+
+.embla__slide-vert {
+  flex: 0 0 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.embla__inner-vert {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease-out;
+}
+
+.embla__inner-vert img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+/* === Миниатюры (горизонтальная лента снизу) === */
+.embla-thumbs {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.embla-thumbs__viewport {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.embla-thumbs__container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  /* 8 колонок */
+  grid-auto-rows: 1fr;
+  /* строки равной высоты */
+  gap: 8px;
+  height: 100%;
+}
+
+.embla-thumbs__slide {
+  min-height: 0;
+  min-width: 0;
+}
+
+.embla-thumbs__slide {
+  min-height: 0;
+  min-width: 0;
+}
+
+.embla-thumbs__slide__button {
+  width: 100%;
+  height: 100%;
+  /* ← кнопка = весь слайд */
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.5;
+  background: transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.embla-thumbs__slide--selected .embla-thumbs__slide__button {
+  opacity: 1;
+border: 2px solid;
+border-image: linear-gradient(
+  90deg,
+  #00000000,
+  #ffffff,
+  rgba(0, 0, 0, 0)
+) 1;
+}
+
+.embla-thumbs__slide__button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.embla-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  height: 60%;
+}
+
+/* =========================
+   EMBLA BUTTON (PREMIUM NEON)
+========================= */
+
+.embla-btn {
+  position: relative;
+
+  width: 30px;
+  height: 30px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+
+  color: #e6e9ff;
+
+  background: rgba(5, 6, 20, 0.95);
+
+  overflow: hidden;
+  isolation: isolate;
+
+  transition: transform 0.35s ease, box-shadow 0.35s ease, color 0.35s ease;
+}
+
+.embla-btn img{
+  width: 14px;
+  height: auto;
+  position: relative;
+  z-index: 999;
+}
+
+/* рамка */
+.embla-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: linear-gradient(90deg,
+      rgba(133, 131, 144, 0.6),
+      rgba(255, 255, 255, 0.85),
+      rgba(133, 131, 144, 0.6));
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* glow слой */
+.embla-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(135deg,
+      #1924bf,
+      #1623e3ac,
+      #d11cfeb8,
+      #c732ec);
+
+  filter: blur(10px);
+  opacity: 0;
+
+  transform: scale(1.6);
+
+  transition: transform 0.6s ease, opacity 0.4s ease;
+
+  z-index: 1;
+}
+
+/* hover */
+.embla-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 20px rgba(25, 36, 191, 0.2),
+    0 0 40px rgba(199, 50, 236, 0.15);
+}
+
+.embla-btn:hover::after {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* =========================
+   VERTICAL PROGRESS TRACK
+========================= */
+
+.embla-progress-track {
+  position: relative;
+  width: 4px;
+  flex: 1;
+  min-height: 0;
+  /* добавили, чтобы flex-child корректно растягивался в column */
+  min-width: 4px;
+  /* на всякий случай фиксируем ширину */
+  background: rgba(5, 6, 20, 0.95);
+  border-radius: 999px;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transform: rotate(180deg);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.03),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* inner frame */
+.embla-progress-track::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  padding: 1px;
+
+  background: linear-gradient(180deg,
+      rgba(133, 131, 144, 0.25),
+      rgba(255, 255, 255, 0.4),
+      rgba(133, 131, 144, 0.25));
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+/* =========================
+   PROGRESS FILL (VERTICAL + PULSE)
+========================= */
+
+.embla-progress-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: 0%;
+
+  border-radius: inherit;
+
+  background: linear-gradient(180deg,
+      #e3e5ff,
+      #cdd4ff,
+      #f0b5ff,
+      #ea96ff);
+
+  transition: height 0.35s ease;
+
+  /* ядро свечения */
+  box-shadow:
+    0 0 6px rgba(255, 255, 255, 0.35),
+    0 0 14px rgba(205, 212, 255, 0.25),
+    0 0 28px rgba(240, 181, 255, 0.18);
+
+  animation: embla-core-pulse 2.4s ease-in-out infinite;
+}
+
+/* внешний ореол */
+.embla-progress-fill::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+
+  border-radius: inherit;
+
+  background: inherit;
+
+  filter: blur(14px);
+
+  opacity: 0.6;
+
+  animation: embla-glow-pulse 2.4s ease-in-out infinite;
+}
+
+/* pulse glow */
+@keyframes embla-glow-pulse {
+  0% {
+    opacity: 0.25;
+    filter: blur(10px);
+  }
+
+  50% {
+    opacity: 0.45;
+    filter: blur(16px);
+  }
+
+  100% {
+    opacity: 0.25;
+    filter: blur(10px);
+  }
+}
+
+/* pulse core */
+@keyframes embla-core-pulse {
+  0% {
+    box-shadow:
+      0 0 6px rgba(255, 255, 255, 0.25),
+      0 0 14px rgba(205, 212, 255, 0.15),
+      0 0 28px rgba(240, 181, 255, 0.10);
+  }
+
+  50% {
+    box-shadow:
+      0 0 10px rgba(255, 255, 255, 0.4),
+      0 0 22px rgba(205, 212, 255, 0.25),
+      0 0 45px rgba(240, 181, 255, 0.2);
+  }
+
+  100% {
+    box-shadow:
+      0 0 6px rgba(255, 255, 255, 0.25),
+      0 0 14px rgba(205, 212, 255, 0.15),
+      0 0 28px rgba(240, 181, 255, 0.10);
+  }
+}
+
+/* === Основная область (карусель + миниатюры) === */
+.embla-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+}
+
+/* Остальные стили без изменений... */
+.embla-vert {
+  height: 540px;
+  min-height: 0;
+}
+
+/* === Zoom-обёртка на слайде === */
+.embla__slide-zoom-wrap {
+  position: relative;
+  width: 100%;
+  min-width: 650px;
+  height: 100%;
+  cursor: zoom-in;
+  border-radius: 12px;
+  overflow: hidden;
+
+  --x: 50%;
+  --y: 50%;
+}
+
+.embla__slide-zoom-wrap--active::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+
+  padding: 2px;
+
+  background: radial-gradient(circle at var(--x) var(--y),
+      #ffffff 0%,
+      #ffffff 1%,
+      #000000 57%,
+      transparent 100%);
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  opacity: 0;
+  transition: opacity 0.45s ease;
+
+  z-index: 66;
+  pointer-events: none;
+}
+
+.embla__slide-zoom-wrap--active:hover::before {
+  opacity: 1;
+}
+
+/* === Мобильный фолбэк: бегущая liquid-light рамка (только активный) === */
+@media (hover: none) {
+  .embla__slide-zoom-wrap--active::before {
+    opacity: 1;
+    
+  padding: 1.2px;
+    background:  linear-gradient(
+  135deg,
+  #3b83f600,
+  #ffffff91,
+  #ec489a00
+)
+  }
+}
+
+.embla__slide-zoom-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  transition: filter 0.25s ease;
+}
+
+.embla__slide-zoom-wrap:hover > img {
+  filter: brightness(0.6);
+}
+
+.embla__zoom-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.embla__slide-zoom-wrap:hover .embla__zoom-icon {
+  opacity: 1;
+}
+
+.embla__zoom-icon img {
+  width: 58px;
+  height: 58px;
+  color: #ffffff;
+  position: relative;
+  z-index: 9999;
+  opacity: 1;
+}
+
+/* === Lightbox === */
+.lb-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lb-img-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: absolute;
+  inset: 0;
+}
+
+.lb-img {
+  max-width: 85vw;
+  max-height: 80vh;
+  object-fit: cover;
+  border-radius: 8px;
+  transform-origin: center center;
+  transition: transform 0.15s ease;
+  user-select: none;
+  padding-bottom: 10px;
+}
+
+.lb-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  background: rgba(5, 6, 20, 0.95);
+
+  overflow: hidden;
+  isolation: isolate;
+
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.lb-close img{
+  width: 12px;
+  height: auto;
+}
+
+/* градиентная рамка */
+.lb-close::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: linear-gradient(90deg,
+      rgba(133, 131, 144, 0.1),
+      rgba(255, 255, 255, 0.6),
+      rgba(133, 131, 144, 0.1));
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* glow слой */
+.lb-close::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(135deg,
+      #ff2d55,
+      #ff4d6d,
+      #ff1f6d,
+      #c732ec);
+
+  filter: blur(12px);
+  opacity: 0;
+
+  transform: scale(1.6);
+
+  transition: opacity 0.4s ease, transform 0.6s ease;
+
+  z-index: 1;
+}
+
+/* hover */
+.lb-close:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 20px rgba(255, 45, 85, 0.25),
+    0 0 40px rgba(199, 50, 236, 0.15);
+}
+
+.lb-close:hover::after {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* icon */
+.lb-close svg,
+.lb-close span {
+  position: relative;
+  z-index: 3;
+
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+.lb-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  z-index: 10;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  background: rgba(5, 6, 20, 0.95);
+
+  overflow: hidden;
+  isolation: isolate;
+
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.lb-nav img {
+  width: 18px;
+}
+/* рамка */
+.lb-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: linear-gradient(90deg,
+      rgba(133, 131, 144, 0.6),
+      rgba(255, 255, 255, 0.85),
+      rgba(133, 131, 144, 0.6));
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* glow слой */
+.lb-nav::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(135deg,
+      #1924bf,
+      #1623e3ac,
+      #d11cfeb8,
+      #c732ec);
+
+  filter: blur(12px);
+  opacity: 0;
+
+  transform: scale(1.6);
+
+  transition: opacity 0.4s ease, transform 0.6s ease;
+
+  z-index: 1;
+}
+
+/* hover */
+.lb-nav:hover {
+  transform: translateY(-50%) scale(1.05);
+
+  box-shadow:
+    0 0 20px rgba(25, 36, 191, 0.25),
+    0 0 40px rgba(199, 50, 236, 0.15);
+}
+
+.lb-nav:hover::after {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* icon */
+.lb-nav svg,
+.lb-nav span {
+  position: relative;
+  z-index: 3;
+
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+/* optional: left/right positioning helpers */
+.lb-nav--left {
+  left: 20px;
+}
+
+.lb-nav--right {
+  right: 20px;
+}
+
+.lb-nav:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.lb-nav svg {
+  width: 30px;
+  height: 30px;
+}
+
+.lb-nav--prev {
+  left: 24px;
+}
+
+.lb-nav--next {
+  right: 24px;
+}
+
+.lb-zoom-controls {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  padding: 6px 14px;
+  color: #fff;
+
+  font-family: "Montserrat Alternates", serif;
+  letter-spacing: 0.08em;
+  font-weight: 400;
+
+  font-size: 16px;
+}
+
+.lb-zoom-controls button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.lb-zoom-controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lb-zoom-controls span {
+  min-width: 40px;
+  text-align: center;
+}
+
+.lb-thumbs {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+  max-width: 90vw;
+  overflow-x: auto;
+  padding: 4px;
+}
+
+.lb-thumb {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.5;
+  background: transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.lb-thumb--active {
+  opacity: 1;
+  border-color: #3b82f6;
+}
+
+.lb-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+  .embla-vertical {
+    flex-direction: column;
+    padding-right: 0;
+  }
+  .embla-vert {
+    height: 420px;
+    width: 100%;
+  }
+
+  .embla-sidebar {
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+  }
+
+  .embla-btn img{
+    transform: rotate(-90deg);
+  }
+
+  .embla-progress-track {
+    width: 100%;
+    height: 4px;
+    flex: 1;
+    transform: none;
+  }
+
+  .embla-thumbs__container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .embla-vert {
+    height: 300px;
+  }
+
+    .embla__slide-zoom-wrap{
+    min-width: 100%;
+  }
+
+  .embla-thumbs__container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .lb-nav img {
+  width: 14px;
+}
+
+  .lb-nav {
+    width: 36px;
+    height: 36px;
+  }
+
+  .lb-zoom-controls {
+    bottom: 70px;
+  }
+}
+
+/* =========================
+   MOBILE: скрыть nav-кнопки сайдбара,
+   показать одну кнопку-лупу
+========================= */
+
+.embla-zoom-btn-mobile {
+  display: none;
+}
+
+.embla-zoom-btn-mobile img{
+  width: 24px;
+  height: auto;
+  filter: blur(0.4px);
+}
+
+@media (max-width: 1024px) {
+  /* Скрываем кнопки навигации (prev/next) в сайдбаре */
+
+  .embla-btn.left {
+    display: none;
+  }
+
+  .embla__slide-zoom-wrap{
+    min-width: 100%;
+  }
+  .embla-sidebar {
+    justify-content: center;
+  }
+
+  /* Кнопка-лупа — видна только на мобильном */
+  .embla-zoom-btn-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+
+    position: relative;
+    flex-shrink: 0;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+
+    color: #e6e9ff;
+    background: rgba(5, 6, 20, 0.95);
+
+    overflow: hidden;
+    isolation: isolate;
+
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .embla-btn{
+       width: 40px;
+    height: 40px;
+  }
+
+  .embla-btn svg{
+    width: 20px;
+    height: 20px;
+    transform: rotate(-90deg);
+  }
+
+  /* Градиентная рамка */
+  .embla-zoom-btn-mobile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+
+    background: linear-gradient(90deg,
+        rgba(133, 131, 144, 0.6),
+        rgba(255, 255, 255, 0.85),
+        rgba(133, 131, 144, 0.6));
+
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Glow fill */
+  .embla-zoom-btn-mobile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(135deg,
+        #1924bf,
+        #1623e3ac,
+        #d11cfeb8,
+        #c732ec);
+
+    filter: blur(10px);
+    transform: scale(1.8);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+
+    transition: transform 0.6s ease, opacity 0.4s ease;
+  }
+
+  .embla-zoom-btn-mobile:active::after {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+
+  .embla-zoom-btn-mobile svg {
+    position: relative;
+    z-index: 3;
+    width: 20px;
+    height: 20px;
+    color: #e6e9ff;
+    filter: drop-shadow(0 0 6px rgba(140, 150, 255, 0.4));
+  }
+
+   .embla-progress-track {
+    width: 100%;
+    height: 6px;
+  }
+
+  .embla-progress-fill {
+    top: 0;
+    left: 0;
+    bottom: auto;
+
+    width: 0;
+    height: 100%;
+
+    background: linear-gradient(
+      90deg,
+      #e3e5ff,
+      #cdd4ff,
+      #f0b5ff,
+      #ea96ff
+    );
+
+    transition: width 0.35s ease;
+  }
+}
+
+@media (max-width: 768px) {
+  .lb-close {
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+  }
+
+    .embla__slide-zoom-wrap{
+    min-width: 100%;
+  }
+
+  .lb-counter {
+    top: 16px;
+    font-size: 12px;
+  }
+
+  .lb-nav {
+    width: 38px;
+    height: 38px;
+  }
+
+  .lb-nav--prev {
+    left: 8px;
+  }
+
+  .lb-nav--right,
+  .lb-nav--next {
+    right: 8px;
+  }
+
+  .lb-img {
+    max-width: 94vw;
+    max-height: 70vh;
+  }
+
+  .lb-zoom-controls {
+    bottom: 78px;
+    padding: 4px 10px;
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  .lb-zoom-controls button {
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+  }
+
+  .lb-thumbs {
+    bottom: 10px;
+    gap: 4px;
+    max-width: 96vw;
+    padding: 4px 2px;
+  }
+
+  .lb-thumb {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 420px) {
+  .lb-zoom-controls {
+    display: none;
+    /* на совсем узких экранах зум удобнее пинчем, контролы убираем */
+  }
+
+  .lb-thumbs {
+    bottom: 8px;
+  }
+
+  .lb-img {
+    max-height: 75vh;
+  }
+}
+
+@media (max-width: 420px) {
+  .lb-thumbs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 92vw;
+    max-width: none;
+    max-height: 26vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+  }
+
+  .lb-thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+}

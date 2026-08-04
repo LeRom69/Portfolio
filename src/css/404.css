@@ -1,0 +1,57 @@
+.notfound {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #fff;
+    margin: 0px 40px;
+}
+
+.ftf-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    pointer-events: none;
+}
+
+.notfound h1 {
+    margin: 0;
+
+        position: relative;
+    z-index: 999;
+
+    font-family: "Novem", sans-serif;
+    font-size: clamp(120px, 22vw, 240px);
+    line-height: .9;
+
+    color: white;
+
+    text-shadow:
+        0 3px 0 rgba(19, 18, 23, 0.48),
+        0 0 8px rgba(19, 18, 23, 0.48),
+        0 0 16px rgba(19, 18, 23, 0.52),
+        0 0 32px rgba(19, 18, 23, 0.58),
+        0 6px 22px rgba(19, 18, 23, 0.75);
+
+}
+
+.notfound p {
+    margin: 16px 0 40px;
+
+    font-family: "Montserrat Alternates", sans-serif;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    z-index: 999;
+        text-shadow:
+        0 3px 0 rgba(19, 18, 23, 0.48),
+        0 0 8px rgba(19, 18, 23, 0.48),
+        0 0 16px rgba(19, 18, 23, 0.52),
+        0 0 20px rgba(19, 18, 23, 0.58),
+        0 6px 22px rgba(19, 18, 23, 0.75);
+    color: rgba(255, 255, 255, .75);
+}

@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Уведомления формы (успех / ошибка) — PREMIUM LIQUID LIGHT
+   Добавьте этот блок в конец файла src/css/contact.css
+   ========================================================================== */
+
+@keyframes liquidPulse {
+  0% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24), 0 0 15px var(--glow-color), inset 0 1px 1px rgba(255, 255, 255, 0.2); }
+  50% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32), 0 0 25px var(--glow-color), inset 0 1px 2px rgba(255, 255, 255, 0.35); }
+  100% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24), 0 0 15px var(--glow-color), inset 0 1px 1px rgba(255, 255, 255, 0.2); }
+}
+
+.form-toast-container {
+  position: fixed;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 720px; /* Немного сузили для более аккуратного «капсульного» вида */
+  padding: 0 24px;
+  pointer-events: none;
+}
+
+.form-toast-container .form-alert {
+  pointer-events: auto;
+}
+
+.form-alert {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 22px;
+  border-radius: 100px; /* Идеальная круглая капсула */
+  font-size: 14px;
+  font-family: "Montserrat Alternates", serif;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  
+  /* Улучшенный стеклянный эффект */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  
+  /* Анимация плавного «дыхания» света */
+  animation: liquidPulse 4s infinite ease-in-out;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.form-alert:hover {
+  transform: translateY(-2px); /* Интерактивный микро-отклик при наведении */
+}
+
+.form-alert__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08); /* Подложка под иконку для объема */
+}
+
+.form-alert__text {
+  flex: 1;
+}
+
+.form-alert__close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 4px;
+  padding: 0;
+
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  opacity: .75;
+  color: #fff;
+
+  transition:
+    opacity .2s ease,
+    background .2s ease,
+    transform .2s ease,
+    border-color .2s ease;
+}
+
+.form-alert__close img,
+.form-alert__close svg {
+  width: 8px;
+  height: 8px;
+  display: block;
+  object-fit: contain;
+
+  filter: brightness(0) invert(1);
+}
+
+.form-alert__close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.053);
+  border-color: rgba(255, 255, 255, 0.053);
+  transform: rotate(90deg);
+}
+
+.form-alert__close:active {
+  transform: scale(.92) rotate(90deg);
+}
+
+.form-alert__close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg); /* Красивый микро-поворот крестика */
+}
+
+/* ==========================================================================
+   Успех (Neon Mint Juice)
+   ========================================================================== */
+.form-alert--success {
+  --glow-color: rgba(34, 197, 94, 0.25);
+  
+  /* Глубокий жидкий градиент + верхний белый глянцевый блик */
+  background: 
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+    linear-gradient(135deg, rgba(5, 14, 9, 0.75) 0%, rgba(3, 29, 13, 0.85) 100%);
+  
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: #adffd1;
+}
+
+.form-alert--success .form-alert__icon {
+  color: #4ade80;
+  box-shadow: inset 0 0 8px rgba(74, 222, 128, 0.3);
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+}
+
+/* ==========================================================================
+   Ошибка (Electric Rose Wine)
+   ========================================================================== */
+.form-alert--error {
+  --glow-color: rgba(239, 68, 68, 0.25);
+  
+  /* Глубокий жидкий градиент + верхний белый глянцевый блик */
+  background: 
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+    linear-gradient(135deg, rgba(14, 5, 5, 0.75) 0%, rgba(29, 3, 3, 0.85) 100%);
+  
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  color: #ffccd5;
+}
+
+.form-alert--error .form-alert__icon {
+  color: #f87171;
+  box-shadow: inset 0 0 8px rgba(248, 113, 113, 0.3);
+  text-shadow: 0 0 10px rgba(248, 113, 113, 0.6);
+}
+
+/* ==========================================================================
+   Вспомогательные элементы и адаптив
+   ========================================================================== */
+
+.turnstile-widget {
+  margin: 12px 0;
+}
+
+@media (max-width: 480px) {
+  .form-toast-container {
+    top: 16px;
+    padding: 0 16px;
+  }
+  
+  .form-alert {
+    padding: 12px 18px;
+    gap: 12px;
+    border-radius: 100px; /* На мобильных сохраняем форму капсулы */
+  }
+}

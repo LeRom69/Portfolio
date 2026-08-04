@@ -1,0 +1,425 @@
+/* =========================
+   GRID
+========================= */
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes rotateCardBorder {
+    to {
+        --angle: 360deg;
+    }
+}
+
+.creations-list {
+    margin: -15px;
+    margin-top: -34px;
+    margin-bottom: 50px;
+
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 12px
+}
+
+/* =========================
+   FIRST BLOCK
+========================= */
+
+.creation-first {
+    grid-column: 1 / 7;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    height: 100%
+}
+
+/* =========================
+   BASE CARD
+========================= */
+
+.creation-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    z-index: 35;
+
+    display: flex;
+
+    justify-content: center;
+
+    font-size: 32px;
+    font-weight: bold;
+
+    height: 100%;
+    border-radius: 6px;
+
+    transition:
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+
+    --x: 50%;
+    --y: 50%;
+
+    /* Каждая карточка — отдельный слой compositing/paint, чтобы hover одной
+       карточки (mousemove → --x/--y → перерисовка ::before) не задевал
+       соседние карточки в гриде. */
+    contain: layout paint;
+}
+
+
+
+/* =========================
+   GLOW BORDER (mouse follow)
+========================= */
+
+.creation-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+
+    padding: 2px;
+
+    background: radial-gradient(circle at var(--x) var(--y),
+
+            #ffffff 0%,
+            #ffffff 1%,
+
+            #000000 57%,
+            transparent 100%);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    opacity: 0;
+    transition: opacity 0.45s ease;
+
+    z-index: 66;
+}
+
+.creation-card:hover::before {
+    opacity: 1;
+}
+
+/* =========================
+   DARK OVERLAY
+========================= */
+
+.creation-card::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+
+    background: rgba(0, 0, 0, 0);
+
+    transition:
+        background 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+    opacity: 0;
+
+    z-index: 55;
+}
+
+.creation-card:hover::after {
+    opacity: 1;
+    background: rgba(2, 1, 8, 0.647);
+}
+
+/* =========================
+   MEDIA
+========================= */
+
+.creation-media {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+    object-position: bottom center;
+
+    transform: scale(1);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+    z-index: 2;
+}
+
+.creation-card:hover .creation-media {
+    transform: scale(1.12);
+}
+
+/* =========================
+   CONTENT LAYER
+========================= */
+
+.creation-card>* {
+    position: relative;
+    z-index: 3;
+}
+
+/* =========================
+   GRID POSITIONS
+========================= */
+
+.creations-list>a:nth-child(2) {
+    grid-column: 7 / 13;
+    height: 402px;
+}
+
+.creations-list>a:nth-child(3) {
+    grid-column: 1 / 6;
+    height: 392px;
+}
+
+.creations-list>a:nth-child(4) {
+    grid-column: 6 / 13;
+    height: 370px;
+}
+
+/* =========================
+   ALIGNMENT RULES
+========================= */
+
+.creations-list>a:nth-child(-n + 2) {
+    align-self: end;
+}
+
+.creations-list>a:nth-child(n + 3) {
+    align-self: start;
+}
+
+/* =========================
+   OVERLAY CONTENT
+========================= */
+
+.creation-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    max-width: 100%;
+    padding: 18px;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+
+    color: #fff;
+
+    opacity: 0;
+    transform: translateY(25px);
+
+    transition:
+        opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+    z-index: 999;
+}
+
+.creation-card:hover .creation-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+
+.card-title {
+    font-family: "Montserrat Alternates", serif;
+    font-size: 20px;
+
+    letter-spacing: 0.15em;
+    margin-bottom: -10px;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+
+    margin-top: 0px;
+}
+
+.card-desc {
+    color: rgba(255, 255, 255, 0.85);
+    font-family: "Anonymous Pro", serif;
+    font-size: 14px;
+    line-height: 120%;
+    width: 76%;
+    font-style: italic;
+    font-weight: 400;
+
+    white-space: pre-line;
+    overflow-wrap: break-word;
+    word-break: break-word;
+
+    margin: 10px 0px;
+    margin-bottom: 6px;
+}
+
+.card-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 16px;
+    margin-top: -15px;
+    margin-bottom: 4px;
+
+    font-size: 14px;
+    font-family: "Montserrat Alternates", serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    color: #fff;
+
+    border: 1px solid rgba(255, 255, 255, 0.27);
+    border-radius: 999px;
+
+    background: radial-gradient(135deg,
+            #878aa00c,
+            #0c0c0fa3);
+
+    overflow: hidden;
+
+    transform: translateY(10px);
+    opacity: 0.7;
+
+    /* Было `transition: all` — браузер обязан отслеживать ВСЕ свойства,
+       включая layout-триггерящие, даже если реально меняются только
+       opacity/transform/box-shadow. Перечисляем явно. */
+    transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* glow line inside */
+.card-link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--x, 20%) var(--y, 20%),
+            rgba(255, 255, 255, 0.112),
+            transparent 60%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.card-link span {
+    position: relative;
+    z-index: 2;
+}
+
+/* hover state */
+.creation-card:hover .card-link {
+    opacity: 1;
+    box-shadow: 0 0 18px rgba(1, 2, 25, 0.25);
+}
+
+.creation-card:hover .card-link::before {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .creation-card::after {
+        opacity: 1;
+        background: rgba(2, 1, 8, 0.55);
+    }
+
+    .creation-overlay {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .creation-card .card-link {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* ===== LIQUID LIGHT BORDER для мобильных ===== */
+    .creation-card::before {
+        opacity: 1;
+
+        background: conic-gradient(from var(--angle),
+                #020615,
+                rgba(255, 255, 255, 0.95) 15%,
+                #020615 30%);
+
+        animation: rotateCardBorder 5s linear infinite;
+    }
+}
+
+/* =========================
+   MEDIA QUERIES
+========================= */
+
+@media (max-width: 768px) {
+    .creations-list {
+        grid-template-columns: 1fr;
+    }
+
+    .creation-overlay {
+        padding: 2px 10px;
+
+    }
+
+    .creation-first {
+        grid-column: auto !important;
+        height: auto;
+    }
+
+    .creations-list>a {
+        grid-column: auto !important;
+        align-self: stretch !important;
+        height: auto !important;
+    }
+
+    .creation-card {
+        min-height: 380px;
+        height: auto;
+        font-size: 18px;
+    }
+
+    .card-desc {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .card-title {
+        font-size: 17px;
+    }
+
+    .card-link {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .creation-card::before {
+        padding: 1.5px;
+        filter: blur(0.3px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .creation-card::before {
+        animation: none;
+    }
+}

@@ -1,0 +1,308 @@
+.roadmap {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 80px 4vw;
+    margin-top: -76px;
+    color: white;
+    width: 100%;
+    z-index: 60;
+    padding-bottom: 80px;
+    pointer-events: none;
+}
+
+/* STEP WRAPPER (hit area) */
+.roadmap-step-wrapper {
+    position: relative;
+    width: clamp(110px, 14vw, 180px);
+    margin: 0 clamp(12px, 3vw, 54px);
+    flex: 1 1 auto;
+    min-width: 0;
+    /* критично — снимает блок на min-content */
+
+}
+
+.roadmap-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* MAIN LINE */
+.roadmap-line {
+    position: absolute;
+    top: 110px;
+    left: -1px;
+    width: 100%;
+    height: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.203);
+    z-index: 10;
+}
+
+/* STEP */
+.roadmap-step {
+    position: relative;
+    text-align: center;
+    transform: translateY(-10px);
+    z-index: 100;
+
+    transition: transform 0.25s ease, filter 0.25s ease;
+
+    pointer-events: all;
+}
+
+/* HOVER / ACTIVE STATE (ONLY ONE SOURCE OF TRUTH) */
+.roadmap-step-wrapper:hover .roadmap-step,
+.roadmap-step.active {
+    transform: translateY(-20px);
+
+}
+
+/* ICON */
+
+/* внутренний слой */
+.icon-img {
+    width: 36px;
+    height: 36px;
+    margin: 0px -32px;
+}
+
+/* ICON HOVER */
+
+
+/* TITLE */
+.title {
+    color: white;
+    font-size: clamp(13px, 1.1vw, 18px);
+    font-weight: 600;
+    font-family: "Montserrat Alternates", serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 8px rgba(43, 15, 83, 0.4),
+        0 0 18px rgba(30, 15, 59, 0.45);
+    white-space: nowrap;
+    margin-top: 10px;
+}
+
+/* DESC */
+.desc {
+    font-size: clamp(11px, 0.9vw, 14px);
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 180px;
+    padding-top: 8px;
+    font-family: "Anonymous Pro", serif;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* ENERGY LINE */
+.roadmap-energy {
+    position: absolute;
+    top: 110px;
+    height: 3px;
+    z-index: 99;
+
+    background: linear-gradient(90deg,
+            rgba(120, 160, 255, 0),
+            #ffffff,
+            rgba(120, 160, 255, 0));
+    border-radius: 999px;
+
+    opacity: 0;
+    transform: scaleX(0.85);
+    transform-origin: center;
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease,
+        width 0.5s ease,
+        left 0.5s ease;
+}
+
+.roadmap-energy.active {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.shadow.roadmap {
+    background-color: #040614be;
+    height: 100%;
+    position: absolute;
+    z-index: -6;
+    filter: blur(17px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:768px) {
+
+    .roadmap {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 42px;
+        padding: 0px 18px 46px 18px;
+        margin-top: 0;
+    }
+
+    .roadmap-energy {
+        display: none;
+    }
+
+    .roadmap-step-wrapper {
+        width: 100%;
+        margin: 0;
+    }
+
+    .roadmap-step {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-height: 88px;
+
+        transform: none !important;
+    }
+
+    /* Иконка ВСЕГДА по центру */
+    .roadmap-icon {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+    }
+
+    /* текст */
+    .roadmap-content {
+        width: calc(50% - 55px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* нечётные — текст справа */
+    .roadmap-step-wrapper:nth-child(odd) .roadmap-content {
+        margin-left: calc(50% + 55px);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* чётные — текст слева */
+    .roadmap-step-wrapper:nth-child(even) .roadmap-content {
+        margin-right: calc(50% + 55px);
+        text-align: right;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .icon-img {
+        width: 32px;
+        height: 32px;
+        margin: 0 -20px;
+    }
+
+    .title {
+        margin: 0;
+        font-size: 16px;
+        white-space: normal;
+    }
+
+    .desc {
+        max-width: none;
+        font-size: 13px;
+        padding-top: 6px;
+    }
+
+    .shadow.roadmap {
+        display: none;
+    }
+
+    .roadmap-line {
+        position: absolute;
+        left: 50%;
+        top: 12%;
+        bottom: 0;
+        width: 4px;
+        height: 78%;
+        transform: translateX(-50%);
+        border: none;
+        overflow: hidden;
+
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+    }
+
+    /* ЖИДКИЙ СВЕТ (flow слой) */
+    .roadmap-line::before,
+    .roadmap-line::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 60%;
+
+        background: linear-gradient(to top,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 1),
+                rgba(255, 255, 255, 1),
+                rgba(255, 255, 255, 0));
+
+        filter: blur(6px);
+        border-radius: 999px;
+    }
+
+    .roadmap-line::before {
+        top: 100%;
+        animation: flow-up 6s linear infinite;
+    }
+
+    .roadmap-line::after {
+        top: -60%;
+        animation: flow-down 6s linear infinite;
+        animation-delay: 1.3s;
+    }
+}
+
+@media (max-width:500px) {
+    .icon-img {
+        width: 32px;
+        height: 32px;
+        margin: 0 -6px;
+    }
+}
+
+@keyframes flow-up {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-280%);
+        opacity: 0;
+    }
+}
+
+@keyframes flow-down {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(280%);
+        opacity: 0;
+    }
+}
