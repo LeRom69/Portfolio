@@ -10,7 +10,7 @@ import { LanguageProvider } from "./Languages/LanguageContext";
 function App() {
   return (
     <LanguageProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/Portfolio">
         <Routes>
           <Route path="/" element={<Main />} />
 
@@ -24,14 +24,9 @@ function App() {
             element={<ProjectShowcaseUI />}
           />
 
-          {/* 404 */}
-
           <Route path="/404" element={<NotFound />} />
 
-          <Route
-            path="*"
-            element={<NotFound />}
-          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>

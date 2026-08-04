@@ -1,9 +1,10 @@
-name: Deploy React to GitHub Pages
+name: Deploy Portfolio to GitHub Pages
 
 on:
   push:
     branches:
       - clean-main
+
   workflow_dispatch:
 
 permissions:
@@ -26,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -34,25 +35,28 @@ jobs:
 
       - name: Build React app
         env:
+          CI: false
+          PUBLIC_URL: /Portfolio
           REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
           REACT_APP_TURNSTILE_SITE_KEY: ${{ vars.REACT_APP_TURNSTILE_SITE_KEY }}
         run: npm run build
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload build
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build
 
   deploy:
+    runs-on: ubuntu-latest
+
+    needs: build
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-    needs: build
 
     steps:
       - name: Deploy to GitHub Pages
