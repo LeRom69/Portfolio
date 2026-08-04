@@ -36,6 +36,7 @@ jobs:
       - name: Build React app
         env:
           CI: false
+          PUBLIC_URL: /Portfolio
           REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
           REACT_APP_TURNSTILE_SITE_KEY: ${{ vars.REACT_APP_TURNSTILE_SITE_KEY }}
         run: npm run build
@@ -50,6 +51,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+
     needs: build
 
     environment:
