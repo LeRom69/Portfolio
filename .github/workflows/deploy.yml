@@ -35,6 +35,7 @@ jobs:
 
       - name: Build React app
         env:
+          CI: false
           REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
           REACT_APP_TURNSTILE_SITE_KEY: ${{ vars.REACT_APP_TURNSTILE_SITE_KEY }}
         run: npm run build
