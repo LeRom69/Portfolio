@@ -20,7 +20,7 @@ export default function Slider({ slides = [] }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [ready, setReady] = useState(false);
 
-  // рефы на все .embla__zoom-wrap, чтобы обновлять --x/--y только у активного
+  // 
   const zoomWrapRefs = useRef([]);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
@@ -91,7 +91,7 @@ export default function Slider({ slides = [] }) {
     };
   }, [emblaApi, updateScale, onSelect]);
 
-  // === Glow border (mouse follow) только для активного слайда ===
+  // === Glow border 
   useEffect(() => {
     initPointer();
 
@@ -136,14 +136,14 @@ export default function Slider({ slides = [] }) {
       <div className="embla-wrapper">
         <div className="embla__controls">
           <button className="embla__ctrl-btn left" onClick={scrollPrev} style={{ transform: "rotate(-90deg)" }}>
-              <img src="/sprites/icons/arrow.svg" alt="" />
+              <img src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`} alt="" />
           </button>
 
           <button
             className="embla__zoom-btn-mobile"
             onClick={() => setLightboxIndex(selectedIndex)}
           >
-            <img src="/sprites/icons/zoom.svg" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/sprites/icons/zoom.svg`} alt="" />
           </button>
 
           <div className="embla__progress-track">
@@ -154,7 +154,7 @@ export default function Slider({ slides = [] }) {
           </div>
 
           <button className="embla__ctrl-btn" onClick={scrollNext} style={{ transform: "rotate(90deg)" }}>
-            <img src="/sprites/icons/arrow.svg" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`} alt="" />
           </button>
         </div>
 
@@ -184,7 +184,7 @@ export default function Slider({ slides = [] }) {
                     >
                       <img src={img} alt="" />
                       <div className="embla__zoom-icon">
-                        <img src="/sprites/icons/zoom.svg" alt="" />
+                        <img src={`${process.env.PUBLIC_URL}/sprites/icons/zoom.svg`} alt="" />
                       </div>
                     </div>
                   </div>
