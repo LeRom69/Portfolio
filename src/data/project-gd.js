@@ -4,8 +4,8 @@ const asset = (path) =>
 const projectsGD = [
   {
     id: 0,
-    cover:  asset("/sprites/covers/planetary.png)",
-    mainImage:  asset("/sprites/mainImages/planetary.png)",
+    cover:  asset("/sprites/covers/planetary.png"),
+    mainImage:  asset("/sprites/mainImages/planetary.png"),
     carouselImages: [
        asset("/sprites/slidesImg/design/planetary/1.png"),
        asset("/sprites/slidesImg/design/planetary/2.png"),
@@ -96,7 +96,7 @@ Within the project, a scalable corporate identity carrier system was created. Pa
   },
   {
     id: 2,
-    cover:  asset("/sprites/covers/pinGo.png",
+    cover:  asset("/sprites/covers/pinGo.png"),
     mainImage:  asset("/sprites/mainImages/pingoSushi.png"),
     carouselImages: [
        asset("/sprites/slidesImg/design/pingoSushi/1.png"),
