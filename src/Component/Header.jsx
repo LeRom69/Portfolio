@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../css/header.css";
 import { useLang } from "../Languages/LanguageContext";
 import translations from "../Languages/translations";
@@ -14,85 +14,196 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileClosing, setMobileClosing] = useState(false);
   const [mobileWorksOpen, setMobileWorksOpen] = useState(false);
+  const [headerHover, setHeaderHover] = useState(false);
 
   const closeTimer = useRef(null);
   const burgerCloseTimer = useRef(null);
   const drawerRef = useRef(null);
+  const burgerRef = useRef(null);
+
   const location = useLocation();
+  const navigate = useNavigate();
 
   const path = location.pathname;
-  const onProjectPage = path.startsWith("/uiux-design/") || path.startsWith("/visual-design/");
 
-  const isHome = path === "/" && !onProjectPage && activeSection === "home";
-  const isContact = !onProjectPage && activeSection === "contact";
+  const onProjectPage =
+    path.startsWith("/visual-design/") ||
+    path.startsWith("/uiux-design/");
+
+  const isHome =
+    !onProjectPage &&
+    activeSection === "home";
+
+  const isContact =
+    !onProjectPage &&
+    activeSection === "contact";
+
   const isWorks =
     onProjectPage ||
-    (path === "/" &&
-      (activeSection === "uiux-design" ||
-        activeSection === "visual-design" ||
-        activeSection === "illustrations"));
+    activeSection === "uiux-design" ||
+    activeSection === "visual-design" ||
+    activeSection === "illustrations";
+
+  /*
+   * ============================================================
+   * SCROLL
+   * ============================================================
+   */
 
   useEffect(() => {
-    // Троттлим через rAF: scroll может стрелять чаще, чем рендерится кадр,
-    // а setScroll с одним и тем же boolean и так не дал бы лишний рендер,
-    // но сам вызов колбэка + чтение window.scrollY на каждое событие —
-    // лишняя работа, которую можно свести к одному разу за кадр.
     let rafId = null;
+
     const onScroll = () => {
       if (rafId !== null) return;
+
       rafId = requestAnimationFrame(() => {
         rafId = null;
         setScroll(window.scrollY > 20);
       });
     };
+
     window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       window.removeEventListener("scroll", onScroll);
-      if (rafId !== null) cancelAnimationFrame(rafId);
+
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
     };
   }, []);
 
+  /*
+   * ============================================================
+   * SECTION DETECTION
+   * ============================================================
+   */
+
   useEffect(() => {
     if (path !== "/") return;
-    const ids = ["home", "uiux-design", "visual-design", "illustrations", "contact"];
-    const elements = ids.map((id) => document.getElementById(id)).filter(Boolean);
+
+    const ids = [
+      "home",
+      "uiux-design",
+      "visual-design",
+      "illustrations",
+      "contact",
+    ];
+
+    const elements = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
     if (!elements.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Берём из всех текущих пересечений только тот элемент, чей центр
-        // ближе всего к центру viewport, а не первый попавшийся из entries.
-        // Иначе при коротких секциях (например, visual-design) при быстром
-        // скролле в узкую полосу observer'а одновременно попадает несколько
-        // секций, и активной становится случайная — та, что оказалась
-        // последней в массиве entries, а не та, что реально видна по центру.
-        const visible = entries.filter((e) => e.isIntersecting);
+        const visible = entries.filter(
+          (entry) => entry.isIntersecting
+        );
+
         if (!visible.length) return;
 
         const viewportCenter = window.innerHeight / 2;
-        const closest = visible.reduce((best, e) => {
-          const rect = e.target.getBoundingClientRect();
-          const elCenter = rect.top + rect.height / 2;
-          const dist = Math.abs(elCenter - viewportCenter);
-          return dist < best.dist ? { id: e.target.id, dist } : best;
-        }, { id: null, dist: Infinity });
 
-        if (closest.id) setActiveSection(closest.id);
+        const closest = visible.reduce(
+          (best, entry) => {
+            const rect =
+              entry.target.getBoundingClientRect();
+
+            const elementCenter =
+              rect.top + rect.height / 2;
+
+            const distance = Math.abs(
+              elementCenter - viewportCenter
+            );
+
+            return distance < best.distance
+              ? {
+                id: entry.target.id,
+                distance,
+              }
+              : best;
+          },
+          {
+            id: null,
+            distance: Infinity,
+          }
+        );
+
+        if (closest.id) {
+          setActiveSection(closest.id);
+        }
       },
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+      {
+        rootMargin: "-45% 0px -45% 0px",
+        threshold: 0,
+      }
     );
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [path, location]);
+    elements.forEach((element) => {
+      observer.observe(element);
+    });
 
-  // Закрытие drawer с анимацией бургера
+    return () => observer.disconnect();
+  }, [path]);
+
+  /*
+   * ============================================================
+   * NAVIGATION
+   * ============================================================
+   */
+
+  const goHome = () => {
+    if (path === "/") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } else {
+      navigate("/");
+    }
+
+    closeMobile();
+  };
+
+  const goToSection = (sectionId) => {
+    if (path === "/") {
+      const element =
+        document.getElementById(sectionId);
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    } else {
+      navigate(`/#${sectionId}`);
+    }
+
+    setActiveSection(sectionId);
+
+    setWorksOpen(false);
+    setMobileWorksOpen(false);
+
+    closeMobile();
+  };
+
+  /*
+   * ============================================================
+   * MOBILE DRAWER
+   * ============================================================
+   */
+
   const closeMobile = () => {
     if (!mobileOpen) return;
+
     setMobileClosing(true);
     setMobileOpen(false);
+
     clearTimeout(burgerCloseTimer.current);
-    // длительность должна совпадать с transition бургера/drawer в CSS
+
     burgerCloseTimer.current = setTimeout(() => {
       setMobileClosing(false);
     }, 350);
@@ -103,104 +214,267 @@ export default function Header() {
       closeMobile();
     } else {
       clearTimeout(burgerCloseTimer.current);
+
       setMobileClosing(false);
       setMobileOpen(true);
     }
   };
 
-  const burgerRef = useRef(null);
-  // закрыть drawer при клике вне
+  /*
+   * Закрытие drawer при клике вне
+   */
+
   useEffect(() => {
     if (!mobileOpen) return;
-    const handler = (e) => {
-      if (
-        drawerRef.current && !drawerRef.current.contains(e.target) &&
-        burgerRef.current && !burgerRef.current.contains(e.target)
-      ) {
+
+    const handler = (event) => {
+      const clickedInsideDrawer =
+        drawerRef.current?.contains(event.target);
+
+      const clickedBurger =
+        burgerRef.current?.contains(event.target);
+
+      if (!clickedInsideDrawer && !clickedBurger) {
         closeMobile();
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+
+    document.addEventListener(
+      "mousedown",
+      handler
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handler
+      );
+    };
   }, [mobileOpen]);
 
-  // закрыть drawer при переходе
+  /*
+   * Закрытие drawer при переходе
+   */
+
   useEffect(() => {
     closeMobile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [location.pathname, location.hash]);
 
-  useEffect(() => () => clearTimeout(burgerCloseTimer.current), []);
+  useEffect(() => {
+    return () => {
+      clearTimeout(burgerCloseTimer.current);
+      clearTimeout(closeTimer.current);
+    };
+  }, []);
 
-  const openMenu = () => { clearTimeout(closeTimer.current); setWorksOpen(true); };
-  const closeMenu = () => { closeTimer.current = setTimeout(() => setWorksOpen(false), 250); };
+  /*
+   * ============================================================
+   * WORKS DROPDOWN
+   * ============================================================
+   */
+
+  const openMenu = () => {
+    clearTimeout(closeTimer.current);
+    setWorksOpen(true);
+  };
+
+  const closeMenu = () => {
+    clearTimeout(closeTimer.current);
+
+    closeTimer.current = setTimeout(() => {
+      setWorksOpen(false);
+    }, 100);
+  };
+
+  /*
+   * ============================================================
+   * RENDER
+   * ============================================================
+   */
 
   return (
     <>
-      <div className={`ai-bar ${scroll ? "shrink" : ""}`}>
-
+      <div
+        className={`ai-bar ${(scroll || headerHover) ? "shrink" : ""}`}
+        onMouseEnter={() => setHeaderHover(true)}
+        onMouseLeave={() => setHeaderHover(false)}
+      >
         {/* LEFT */}
+
         <div className="ai-left">
-          <span className="ai-logo">
-            <img src="/sprites/logo.svg" alt="VR Logo" />
+          <span
+            className="ai-logo"
+            onClick={goHome}
+            aria-label="Home"
+          >
+            <img
+              src={`${process.env.PUBLIC_URL}/sprites/logo.svg`}
+              alt="VR Logo"
+            />
           </span>
-          <span className="ai-name">V.<br/>ROMANISHYNA</span>
+
+          <span className="ai-name">V.<br />ROMANISHYNA</span>
         </div>
 
-        {/* CENTER — desktop nav */}
-        <nav className="ai-nav">
-          <a href="/" className={isHome ? "active" : ""}>{t.home}</a>
+        {/* CENTER */}
 
-          <div className="ai-dd" onMouseEnter={openMenu} onMouseLeave={closeMenu}>
-            <button className={isWorks ? "active" : ""}>
+        <nav className="ai-nav">
+          <button
+            className={isHome ? "active" : ""}
+            onClick={goHome}
+          >
+            {t.home}
+          </button>
+
+          <div
+            className="ai-dd"
+            onMouseEnter={openMenu}
+            onMouseLeave={closeMenu}
+          >
+            <button
+              className={isWorks ? "active" : ""}
+              onClick={() =>
+                setWorksOpen((value) => !value)
+              }
+            >
               {t.works}
-              <svg className={`ai-chevron ${worksOpen ? "open" : ""}`} width="10" height="10" viewBox="0 0 10 10">
-                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+
+              <svg
+                className={`ai-chevron ${worksOpen ? "open" : ""
+                  }`}
+                width="10"
+                height="10"
+                viewBox="0 0 10 10"
+              >
+                <path
+                  d="M2 3.5L5 6.5L8 3.5"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
 
-            <div className={`ai-menu ${worksOpen ? "open" : ""}`}>
+            <div
+              className={`ai-menu ${worksOpen ? "open" : ""
+                }`}
+            >
               <span className="ai-menu-line" />
-              <a href="/#uiux-design" className={`dd-item ${activeSection === "uiux-design" ? "active" : ""}`}>
+
+              <button
+                className={`dd-item ${activeSection === "uiux-design"
+                  ? "active"
+                  : ""
+                  }`}
+                onClick={() =>
+                  goToSection("uiux-design")
+                }
+              >
                 <span>{t.ui}</span>
-              </a>
-              <span className="dd-line"><span className="dd-track" /><span className="dd-dot" /></span>
-              <a href="/#visual-design" className={`dd-item ${activeSection === "visual-design" ? "active" : ""}`}>
+              </button>
+
+              <span className="dd-line">
+                <span className="dd-track" />
+                <span className="dd-dot" />
+              </span>
+
+              <button
+                className={`dd-item ${activeSection === "visual-design"
+                  ? "active"
+                  : ""
+                  }`}
+                onClick={() =>
+                  goToSection("visual-design")
+                }
+              >
                 <span>{t.branding}</span>
-              </a>
-              <span className="dd-line"><span className="dd-track" /><span className="dd-dot" /></span>
-              <a href="/#illustrations" className={`dd-item ${activeSection === "illustrations" ? "active" : ""}`}>
+              </button>
+
+              <span className="dd-line">
+                <span className="dd-track" />
+                <span className="dd-dot" />
+              </span>
+
+              <button
+                className={`dd-item ${activeSection === "illustrations"
+                  ? "active"
+                  : ""
+                  }`}
+                onClick={() =>
+                  goToSection("illustrations")
+                }
+              >
                 <span>{t.illustrations}</span>
-              </a>
-              <span className="dd-line"><span className="dd-track" /><span className="dd-dot" /></span>
+              </button>
+
+              <span className="dd-line">
+                <span className="dd-track" />
+                <span className="dd-dot" />
+              </span>
             </div>
           </div>
 
-          <a href="/#contact" className={isContact ? "active" : ""}>{t.contact}</a>
+          <button
+            className={isContact ? "active" : ""}
+            onClick={() =>
+              goToSection("contact")
+            }
+          >
+            {t.contact}
+          </button>
         </nav>
 
-        {/* RIGHT — desktop lang */}
+        {/* RIGHT */}
+
         <div className="ai-right">
-          <div className="lang" onClick={toggle}>
-            <span className={`lang-pill ${lang === "UA" ? "shift" : ""}`} />
-            <span className={lang === "EN" ? "on" : ""}>EN</span>
-            <span className={lang === "UA" ? "on" : ""}>UA</span>
+          <div
+            className="lang"
+            onClick={toggle}
+          >
+            <span
+              className={`lang-pill ${lang === "UA" ? "shift" : ""
+                }`}
+            />
+
+            <span
+              className={
+                lang === "EN" ? "on" : ""
+              }
+            >
+              EN
+            </span>
+
+            <span
+              className={
+                lang === "UA" ? "on" : ""
+              }
+            >
+              UA
+            </span>
           </div>
         </div>
 
-        {/* BURGER — mobile only */}
+        {/* BURGER */}
+
         <button
           ref={burgerRef}
-          className={`ai-burger ${mobileOpen ? "open" : ""} ${mobileClosing ? "closing" : ""}`}
+          className={`ai-burger ${mobileOpen ? "open" : ""
+            } ${mobileClosing ? "closing" : ""
+            }`}
           aria-label="Menu"
           aria-expanded={mobileOpen}
           onClick={toggleMobile}
         >
-          <span /><span /><span />
+          <span />
+          <span />
+          <span />
         </button>
       </div>
 
       {/* MOBILE DRAWER */}
+      
       <div
         ref={drawerRef}
         className={`ai-drawer ${mobileOpen ? "open" : ""} ${mobileClosing ? "closing" : ""}`}
