@@ -8,10 +8,10 @@ import { useLang } from "../Languages/LanguageContext";
 import translations from "../Languages/translations";
 
 const icons = [
-  "/sprites/icons/bulb.svg",
-  "/sprites/icons/warframe.svg",
-  "/sprites/icons/palette.svg",
-  "/sprites/icons/design.svg",
+  `${process.env.PUBLIC_URL}/sprites/icons/bulb.svg`,
+  `${process.env.PUBLIC_URL}/sprites/icons/warframe.svg`,
+  `${process.env.PUBLIC_URL}/sprites/icons/palette.svg`,
+  `${process.env.PUBLIC_URL}/sprites/icons/design.svg`,
 ];
 
 export default function Roadmap() {
