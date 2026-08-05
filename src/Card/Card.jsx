@@ -85,33 +85,38 @@ export default function Card({
     el.style.setProperty("--y", `50%`);
   };
 
-  return (
-    <a
-      href={`${link}/${webName}`}
-      className="creation-card"
-      ref={ref}
-      onMouseLeave={handleLeave}
-    >
-      {cover && (
-        <img
-          src={cover}
-          alt={resolvedTitle}
-          className="creation-media"
-          loading="lazy"
-          decoding="async"
-        />
+return (
+  <Link
+    to={`/${link}/${webName}`}
+    className="creation-card"
+    ref={ref}
+    onMouseLeave={handleLeave}
+  >
+    {cover && (
+      <img
+        src={cover}
+        alt={resolvedTitle}
+        className="creation-media"
+        loading="lazy"
+        decoding="async"
+      />
+    )}
+
+    <div className="creation-overlay">
+      {resolvedTitle && (
+        <h3 className="card-title">{resolvedTitle}</h3>
       )}
 
-      <div className="creation-overlay">
-        {resolvedTitle && <h3 className="card-title">{resolvedTitle}</h3>}
-        {resolvedDesc && <p className="card-desc">{resolvedDesc}</p>}
+      {resolvedDesc && (
+        <p className="card-desc">{resolvedDesc}</p>
+      )}
 
-        <span className="card-link">
-          {t.viewProject}
-        </span>
+      <span className="card-link">
+        {t.viewProject}
+      </span>
 
-        {children}
-      </div>
-    </a>
-  );
+      {children}
+    </div>
+  </Link>
+);
 }
