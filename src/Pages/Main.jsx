@@ -158,7 +158,7 @@ export default function App() {
               <div className="shadow" />
             </div>
             <img
-              src="./sprites/about.png"
+              src={`${process.env.PUBLIC_URL}/sprites/about.png`}
               alt="Logo"
               className="about-photo"
               loading="lazy"
@@ -275,7 +275,7 @@ export default function App() {
                   <div className="image-card">
                     <div className="image-inner">
                       <img
-                        src="/sprites/drawings/foxShrine.png"
+                        src={`${process.env.PUBLIC_URL}/sprites/drawings/foxShrine.png`}
                         alt="foxShrine"
                         loading="lazy"
                         decoding="async"
@@ -297,7 +297,7 @@ export default function App() {
                     <div className="image-card right">
                       <div className="image-inner">
                         <img
-                          src="/sprites/drawings/jelly.png"
+                          src={`${process.env.PUBLIC_URL}/sprites/drawings/jelly.png`}
                           alt="jelly"
                           loading="lazy"
                           decoding="async"
