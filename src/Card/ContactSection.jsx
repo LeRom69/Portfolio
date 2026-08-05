@@ -226,7 +226,7 @@ export default function ContactSection() {
                   onClick={() => setStatus("idle")}
                   aria-label={t.closeAlert}
                 >
-                  <img src="/sprites/icons/xrest.svg" alt=""/>
+                  <img src={`${process.env.PUBLIC_URL}/sprites/icons/xrest.svg`} alt=""/>
                 </button>
               </motion.div>
             )}
@@ -248,7 +248,7 @@ export default function ContactSection() {
                   onClick={() => setStatus("idle")}
                   aria-label={t.closeAlert}
                 >
-               <img src="/sprites/icons/xrest.svg" alt=""/> 
+               <img src={`${process.env.PUBLIC_URL}/sprites/icons/xrest.svg`} alt=""/> 
                 </button>
               </motion.div>
             )}
@@ -261,7 +261,7 @@ export default function ContactSection() {
         
         {/* BACKGROUND */}
         <img
-          src="./sprites/form.png"
+          src={`${process.env.PUBLIC_URL}/sprites/form.png`}
           className="contact-bg"
           alt="Logo"
           loading="lazy"
