@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { subscribePointer, initPointer } from "../js/pointerStore";
 import { useLang } from "../Languages/LanguageContext";
 import translations from "../Languages/translations";
