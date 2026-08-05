@@ -1,17 +1,20 @@
+const asset = (path) =>
+  `${process.env.PUBLIC_URL}${path}`;
+
 const projectsGD = [
   {
     id: 0,
-    cover: "/sprites/covers/planetary.png",
-    mainImage: "/sprites/mainImages/planetary.png",
+    cover:  asset("/sprites/covers/planetary.png)",
+    mainImage:  asset("/sprites/mainImages/planetary.png)",
     carouselImages: [
-      "/sprites/slidesImg/design/planetary/1.png",
-      "/sprites/slidesImg/design/planetary/2.png",
-      "/sprites/slidesImg/design/planetary/3.png",
-      "/sprites/slidesImg/design/planetary/4.png",
-      "/sprites/slidesImg/design/planetary/5.png",
-      "/sprites/slidesImg/design/planetary/6.png",
-      "/sprites/slidesImg/design/planetary/7.png",
-      "/sprites/slidesImg/design/planetary/8.png",
+       asset("/sprites/slidesImg/design/planetary/1.png"),
+       asset("/sprites/slidesImg/design/planetary/2.png"),
+       asset("/sprites/slidesImg/design/planetary/3.png"),
+       asset("/sprites/slidesImg/design/planetary/4.png"),
+       asset("/sprites/slidesImg/design/planetary/5.png"),
+       asset("/sprites/slidesImg/design/planetary/6.png"),
+       asset("/sprites/slidesImg/design/planetary/7.png"),
+       asset("/sprites/slidesImg/design/planetary/8.png"),
     ],
     title: {
       EN: "Poster Series\nThe Unknown Universe: Planetary Archive",
@@ -50,15 +53,15 @@ The information architecture was designed on the principle of archive cards. Top
   },
   {
     id: 1,
-    cover: "/sprites/covers/sugarFairy.png",
-    mainImage: "/sprites/mainImages/sugarFairy.png",
+    cover:  asset("/sprites/covers/sugarFairy.png"),
+    mainImage:  asset("/sprites/mainImages/sugarFairy.png"),
     carouselImages: [
-      "/sprites/slidesImg/design/sugarFairy/1.png",
-      "/sprites/slidesImg/design/sugarFairy/2.png",
-      "/sprites/slidesImg/design/sugarFairy/3.png",
-      "/sprites/slidesImg/design/sugarFairy/4.png",
-      "/sprites/slidesImg/design/sugarFairy/5.png",
-      "/sprites/slidesImg/design/sugarFairy/6.png",
+       asset("/sprites/slidesImg/design/sugarFairy/1.png"),
+       asset("/sprites/slidesImg/design/sugarFairy/2.png"),
+       asset("/sprites/slidesImg/design/sugarFairy/3.png"),
+       asset("/sprites/slidesImg/design/sugarFairy/4.png"),
+       asset("/sprites/slidesImg/design/sugarFairy/5.png"),
+       asset("/sprites/slidesImg/design/sugarFairy/6.png"),
     ],
     title: {
       EN: "SugarFairy\nSweet Brand Identity",
@@ -93,15 +96,15 @@ Within the project, a scalable corporate identity carrier system was created. Pa
   },
   {
     id: 2,
-    cover: "/sprites/covers/pinGo.png",
-    mainImage: "/sprites/mainImages/pingoSushi.png",
+    cover:  asset("/sprites/covers/pinGo.png",
+    mainImage:  asset("/sprites/mainImages/pingoSushi.png"),
     carouselImages: [
-      "/sprites/slidesImg/design/pingoSushi/1.png",
-      "/sprites/slidesImg/design/pingoSushi/2.png",
-      "/sprites/slidesImg/design/pingoSushi/3.png",
-      "/sprites/slidesImg/design/pingoSushi/4.png",
-      "/sprites/slidesImg/design/pingoSushi/5.png",
-      "/sprites/slidesImg/design/pingoSushi/6.png",
+       asset("/sprites/slidesImg/design/pingoSushi/1.png"),
+       asset("/sprites/slidesImg/design/pingoSushi/2.png"),
+       asset("/sprites/slidesImg/design/pingoSushi/3.png"),
+       asset("/sprites/slidesImg/design/pingoSushi/4.png"),
+       asset("/sprites/slidesImg/design/pingoSushi/5.png"),
+       asset("/sprites/slidesImg/design/pingoSushi/6.png"),
     ],
     title: {
       EN: "PinGo Sushi\nLogo & Mascot Design",
