@@ -31,7 +31,6 @@ export default function Lightbox({ images, startIndex, onClose }) {
         reset();
     }, [images.length]);
 
-    // блокировка скролла страницы
     useEffect(() => {
         const scrollY = window.scrollY;
         const { overflow, position, top, width } = document.body.style;
@@ -55,7 +54,6 @@ export default function Lightbox({ images, startIndex, onClose }) {
         setZoom((z) => Math.min(5, Math.max(1, z - e.deltaY * 0.001)));
     }, []);
 
-    // ручная подписка на wheel с passive:false
     useEffect(() => {
         const el = imgWrapRef.current;
         if (!el) return;
@@ -126,7 +124,6 @@ export default function Lightbox({ images, startIndex, onClose }) {
         }
     }, [zoom]);
 
-    // ручная подписка на touchmove с passive:false
     useEffect(() => {
         const el = imgWrapRef.current;
         if (!el) return;
@@ -164,15 +161,15 @@ export default function Lightbox({ images, startIndex, onClose }) {
     const content = (
         <div className="lb-overlay" onClick={onClose}>
             <button className="lb-close" onClick={onClose} aria-label="Закрыть">
-                 <img src="/sprites/icons/xrest.svg" alt="" />
+                 <img src={`${process.env.PUBLIC_URL}/sprites/icons/xrest.svg`} alt="" />
             </button>
 
             <button
                 className="lb-nav lb-nav--prev"
                 onClick={(e) => { e.stopPropagation(); goPrev(); }}
-                aria-label="Предыдущее"
+                aria-label="Previous"
             >
-                <img style={{ transform: "rotate(-90deg)" }} src="/sprites/icons/arrow.svg" alt="" />
+                <img style={{ transform: "rotate(-90deg)" }} src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`} alt="" />
             </button>
 
             <div
@@ -201,9 +198,9 @@ export default function Lightbox({ images, startIndex, onClose }) {
             <button
                 className="lb-nav lb-nav--next"
                 onClick={(e) => { e.stopPropagation(); goNext(); }}
-                aria-label="Следующее"
+                aria-label="Next"
             >
-                  <img style={{ transform: "rotate(90deg)" }} src="/sprites/icons/arrow.svg" alt="" />
+                  <img style={{ transform: "rotate(90deg)" }} src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`} alt="" />
             </button>
             <div>
                 <div className="lb-zoom-controls" onClick={(e) => e.stopPropagation()}>
