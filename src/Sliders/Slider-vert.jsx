@@ -7,13 +7,13 @@ import { subscribePointer, initPointer } from "../js/pointerStore";
 
 import "../css/slider-vert.css";
 
-// ── Основной слайдер ───────────────────────────────────────
+//
 export default function Slider({ slidesVrt = [] }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scale, setScale] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
-  // рефы на все .embla__slide-zoom-wrap, чтобы обновлять --x/--y только у активного
+  // 
   const zoomWrapRefs = useRef([]);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -58,7 +58,7 @@ export default function Slider({ slidesVrt = [] }) {
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
-  // Открыть лупу на текущем слайде (для мобильной кнопки)
+  // 
   const openCurrentZoom = useCallback(() => {
     setLightboxIndex(selectedIndex);
   }, [selectedIndex]);
@@ -81,7 +81,7 @@ export default function Slider({ slidesVrt = [] }) {
     };
   }, [emblaApi, updateScale, onSelect]);
 
-  // === Glow border (mouse follow) только для активного слайда ===
+  // === Glow border 
   useEffect(() => {
     initPointer();
 
@@ -128,7 +128,7 @@ export default function Slider({ slidesVrt = [] }) {
     const mq = window.matchMedia("(max-width: 1024px)");
     const handleChange = (e) => setIsMobile(e.matches);
 
-    handleChange(mq); // выставить актуальное значение сразу
+    handleChange(mq); 
     mq.addEventListener("change", handleChange);
 
     return () => mq.removeEventListener("change", handleChange);
@@ -137,18 +137,18 @@ export default function Slider({ slidesVrt = [] }) {
   return (  
     <>
       <div className="embla-vertical">
-        {/* Сайдбар: кнопки + прогресс */}
+      
         <div className="embla-sidebar">
           <button
             className="embla-zoom-btn-mobile"
             onClick={openCurrentZoom}
             aria-label="Открыть в полном размере"
           >
-            <img src="/sprites/icons/zoom.svg" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/sprites/icons/zoom.svg`} alt="" />
           </button>
 
-          <button className="embla-btn left" onClick={scrollPrev} aria-label="Предыдущий">
-            <img src="/sprites/icons/arrow.svg" alt="" />
+          <button className="embla-btn left" onClick={scrollPrev} aria-label="Previous">
+            <img src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`} alt="" />
           </button>
 
           <div className="embla-progress-track">
@@ -162,8 +162,8 @@ export default function Slider({ slidesVrt = [] }) {
             />
           </div>
 
-          <button className="embla-btn" onClick={scrollNext} aria-label="Следующий" style={{ transform: "rotate(-180deg)" }}>
-            <img src="/sprites/icons/arrow.svg" alt="" />
+          <button className="embla-btn" onClick={scrollNext} aria-label="Next" style={{ transform: "rotate(-180deg)" }}>
+            <img src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`} alt="" />
           </button>
         </div>
 
@@ -189,7 +189,7 @@ export default function Slider({ slidesVrt = [] }) {
                       >
                         <img src={img} alt="" draggable={false} />
                         <div className="embla__zoom-icon">
-                          <img src="/sprites/icons/zoom.svg" alt="" />
+                          <img src={`${process.env.PUBLIC_URL}/sprites/icons/zoom.svg`} alt="" />
                         </div>
                       </div>
                     </div>
@@ -211,7 +211,6 @@ export default function Slider({ slidesVrt = [] }) {
                       type="button"
                       className="embla-thumbs__slide__button"
                       onClick={() => onThumbClick(i)}
-                      aria-label={`Перейти к слайду ${i + 1}`}
                     >
                       <img src={img} alt="" draggable={false} />
                     </button>
