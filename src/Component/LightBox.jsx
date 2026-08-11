@@ -502,4 +502,3 @@ export default function Lightbox({ images, startIndex, onClose }) {
         document.body
     );
 }
-
