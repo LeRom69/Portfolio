@@ -39,21 +39,20 @@
 }
 
 /* === Zoom-обёртка === */
-/* === Zoom-обёртка === */
+
 .embla__zoom-wrap {
   position: relative;
   width: 100%;
   height: 100%;
   cursor: zoom-in;
   border-radius: 16px;
-  /* совпадает с .embla__inner, чтобы рамка легла ровно */
+
   overflow: hidden;
 
   --x: 50%;
   --y: 50%;
 }
 
-/* === Glow border (mouse follow), только у активного слайда === */
 .embla__zoom-wrap--active::before {
   content: "";
   position: absolute;
@@ -85,8 +84,7 @@
   opacity: 1;
 }
 
-/* === Мобильный фолбэк: бегущая liquid-light рамка (только активный) === */
-@media (hover: none) {
+@media (hover: none) and (pointer: coarse) {
   .embla__zoom-wrap--active::before {
     opacity: 1;
 
@@ -133,15 +131,16 @@
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
 }
 
-/* === Контролы — снаружи карусели, не прыгают === */
 .embla__controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* центрируем всю группу */
+
   gap: 12px;
   padding: 0 8px 12px;
-  /* было: 12px 8px 0 */
+  margin-top: 10px;
+  margin-bottom: 6px;
+
   height: 44px;
   flex-shrink: 0;
 
@@ -280,7 +279,6 @@
 
   border-radius: 999px;
   overflow: visible;
-  /* 🔥 критично */
 
   border: 1px solid rgba(255, 255, 255, 0.08);
 
@@ -325,7 +323,6 @@
 
   transition: width 0.35s ease;
 
-  /* базовое свечение */
   box-shadow:
     0 0 6px rgba(255, 255, 255, 0.195),
     0 0 14px rgba(205, 212, 255, 0.2),
@@ -367,7 +364,6 @@
   }
 }
 
-/* лёгкое дыхание ядра */
 .embla__progress-fill {
   animation: embla-core-pulse 2.4s ease-in-out infinite;
 }
@@ -406,15 +402,15 @@
   }
 
   .embla__controls {
-    gap: 8px;
-    padding: 0 8px 10px;
+    padding: 0px 8px 10px;
+    margin-top: 16px;
+    margin-bottom: 8px;
   }
 
   .embla__progress-track {
     max-width: none;
   }
 
-  /* Скрываем кнопки навигации (prev/next) на мобильном */
   .embla__ctrl-btn.left {
     display: none;
   }
@@ -432,7 +428,6 @@
 
 /* =========================
    MOBILE ZOOM BUTTON
-   (единственная кнопка в слайдере на mobile)
 ========================= */
 
 .embla__zoom-btn-mobile {

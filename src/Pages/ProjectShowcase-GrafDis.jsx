@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import GridOverlayVert from "../Grids/GridOverlay-Vertical";
+import GridOverlay from "../Grids/GridOverlay";
 import { useGlobalMouse } from "../Effects/useGlobalMouse";
 import Fog from "../Effects/FogDesc";
 
@@ -19,6 +19,7 @@ import { SpotlightContainer } from "../Effects/Spotlight";
 
 import "../css/index.css";
 import "../css/showcase.css";
+import "../css/slider-vert.css";
 
 import Header from "../Component/Header";
 import Footer from "../Component/Footer";
@@ -29,9 +30,6 @@ import { useLang } from "../Languages/LanguageContext";
 import translations from "../Languages/translations";
 import { localize } from "../Card/Card";
 
-// Хук определения мобильной ширины экрана.
-// Используется, чтобы спотлайт не "уплывал" при смене
-// раскладки (flex-direction: column на мобильных).
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth <= breakpoint : false
@@ -66,22 +64,29 @@ export default function Page() {
   }, []);
 
   if (!projectGd) {
-        return <Navigate to="/404" replace />;
+    return <Navigate to="/404" replace />;
   }
 
   const slides = projectGd?.carouselImages || [];
 
-  // Resolve localized fields
   const title = localize(projectGd.title, lang);
   const textCreatSect = localize(projectGd.textCreatSect, lang);
   const textProdSect = localize(projectGd.textProdSect, lang);
   const textAnnt = localize(projectGd.textAnnt, lang);
 
-  // Параметры спотлайта зависят от брейкпоинта,
-  // чтобы он не "уплывал" при смене раскладки на мобильных.
   const spotlightPropsCreate = isMobile
-    ? { fill: "#9492ba27", top: "-46%", left: "-46%", length: "950" }
-    : { fill: "#9492ba27", top: "-75%", left: "-28%", length: "950" };
+    ? {
+      fill: "#9492ba27",
+      top: "-330px",
+      left: "-132px",
+      length: "950",
+    }
+    : {
+      fill: "#9492ba27",
+      top: "-380px",
+      left: "-200px",
+      length: "950",
+    };
 
   return (
     <main style={{ overflow: "hidden" }}>
@@ -99,7 +104,7 @@ export default function Page() {
           </div>
 
           <div className="prototype-flex-main">
-            <div className="shadow" />
+            <div className="shadow-90" />
             <div>
               <h4 className="sect-subtitle prototype-subtitle" style={{ paddingRight: "40px" }}>
                 <EncryptedText text={t.fromIdea} baseSpeed={120} variance={600} maxLineLength={11} />
@@ -129,8 +134,10 @@ export default function Page() {
               <EncryptedText text={t.roadmapTitle.slice(1)} baseSpeed={120} variance={600} />
             </span>
           </h4>
-          <div className="shadow" style={{ zIndex: "2" }} />
-          <p className="sect-text slides" style={{ zIndex: "4" }}>{t.roadmapSubtitle}</p>
+          <div className="flex">
+            <div className="shadow-mini" style={{ zIndex: "2" }} />
+            <p className="sect-text slides" style={{ zIndex: "4", width: "100%" }}>{t.roadmapSubtitle}</p>
+          </div>
         </div>
 
         <RoadMap />
@@ -143,20 +150,22 @@ export default function Page() {
               <EncryptedText text={t.resultTitle.slice(1)} baseSpeed={120} variance={600} />
             </span>
           </h4>
-          <div className="shadow" style={{ zIndex: "2" }} />
-          <p className="sect-text slides" style={{ zIndex: "5" }}>{textProdSect}</p>
-
+          <div className="flex-div">
+            <div className="shadow" style={{ zIndex: "2", filter: "blur(24px)", width: "66%" }} />
+            <p className="sect-text slides" style={{ zIndex: "5" }}>{textProdSect}</p>
+          </div>
           <div className="slider-wrapper-slide">
             <Slider slides={slides} />
           </div>
 
-          <div className="sect-text slides" style={{ zIndex: "5" }}>
-            <div dangerouslySetInnerHTML={{ __html: textAnnt }} />
+          <div className="sect-text slides">
+            <div className="shadow-mini" style={{ zIndex: "1", margin: "0" }} />
+            <div style={{ position: "relative", zIndex: "6" }} dangerouslySetInnerHTML={{ __html: textAnnt }} />
           </div>
         </div>
 
         <Footer />
-        <GridOverlayVert />
+        <GridOverlay className="grid-unified--vertical-only" waveClassName="wave" />
       </section>
     </main>
   );

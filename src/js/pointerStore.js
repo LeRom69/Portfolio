@@ -35,7 +35,6 @@ export function initPointer() {
   listenersAttached = true;
 
   const onMove = (e) => {
-    // Координаты пишем сразу (дёшево), а рассылку подписчикам — троттлим.
     pointer.x = e.clientX;
     pointer.y = e.clientY;
     scheduleEmit();

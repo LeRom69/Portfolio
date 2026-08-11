@@ -6,7 +6,6 @@
 .fx-footer a {
   font-family: "Montserrat Alternates", serif;
   font-size: 18px;
-  /* Відсотки в letter-spacing не валідні, переводимо в em (28% = 0.28em) */
   letter-spacing: 0.18em;
   font-weight: 600;
 }
@@ -82,7 +81,6 @@
   z-index: 1;
 }
 
-/* основной мягкий glow-ореол */
 .fx-dot::before {
   content: "";
   position: absolute;
@@ -103,7 +101,6 @@
   z-index: -1;
 }
 
-/* легкое “дыхание” свечения без scale */
 .fx-dot {
   animation: fx-dot-core 3.6s ease-in-out infinite;
 }
@@ -263,7 +260,6 @@
   position: relative;
   top: -1px;
 
-  /* мягкое живое свечение */
   box-shadow:
     0 0 6px rgba(34, 197, 94, 0.18),
     0 0 14px rgba(34, 197, 94, 0.08);
@@ -310,9 +306,7 @@
   }
 
   .fx-links {
-    gap: 18px;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: none;
   }
 
   .fx-right {
@@ -330,7 +324,7 @@
   }
 
   .fx-links {
-    gap: 12px;
+    display: none;
   }
 
   .fx-right {

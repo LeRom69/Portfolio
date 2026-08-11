@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import GridOverlayVert from "../Grids/GridOverlay-Vertical";
+import GridOverlay from "../Grids/GridOverlay";
 import { useGlobalMouse } from "../Effects/useGlobalMouse";
 import Fog from "../Effects/FogDesc";
 
@@ -30,9 +30,6 @@ import { useLang } from "../Languages/LanguageContext";
 import translations from "../Languages/translations";
 import { localize } from "../Card/Card";
 
-// Хук определения мобильной ширины экрана.
-// Используется, чтобы не давать спотлайту "уплывать" при
-// смене раскладки (flex-direction: column на мобильных).
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth <= breakpoint : false
@@ -72,21 +69,38 @@ export default function Page() {
 
   const slidesVrt = projectUi?.carouselImages || [];
 
-  // Resolve localized fields
   const title = localize(projectUi.title, lang);
   const textCreatSect = localize(projectUi.textCreatSect, lang);
   const textProdSect = localize(projectUi.textProdSect, lang);
   const textAnnt = localize(projectUi.textAnnt, lang);
 
-  // Параметры спотлайта зависят от брейкпоинта,
-  // чтобы он не "уплывал" при смене раскладки на мобильных.
   const spotlightPropsCreate = isMobile
-    ? { fill: "#9492ba27", top: "-46%", left: "-46%", length: "950" }
-    : { fill: "#9492ba27", top: "-86%", left: "-22%", length: "950" };
+    ? {
+        fill: "#9492ba27",
+        top: "-330px",
+        left: "-132px",
+        length: "950",
+      }
+    : {
+        fill: "#9492ba27",
+        top: "-380px",
+        left: "-200px",
+        length: "950",
+      };
 
   const spotlightPropsResult = isMobile
-    ? { fill: "#9492ba27", top: "-86%", left: "-46%", length: "950" }
-    : { fill: "#9492ba27", top: "-154%", left: "-22%", length: "800" };
+    ? {
+        fill: "#9492ba27",
+        top: "-220px",
+        left: "-100px",
+        length: "950",
+      }
+    : {
+        fill: "#9492ba27",
+        top: "-220px",
+        left: "-100px",
+        length: "800",
+      };
 
   return (
     <main style={{ overflow: "hidden" }}>
@@ -94,7 +108,7 @@ export default function Page() {
       <Header />
 
       <section className="section">
-        <div className="prototype" style={{ paddingTop: "88px", position: "relative", zIndex: "2", pointerEvents: "none" }}>
+        <div className="prototype" style={{ paddingTop: "88px", position: "relative", zIndex: "6", pointerEvents: "none" }}>
           <div className="title-wrap">
             <h3 id="title-label" ref={registerTitle} className="sect-title" style={{ marginBottom: "0" }}>
               {title}
@@ -103,7 +117,7 @@ export default function Page() {
           </div>
 
           <div className="prototype-flex-main">
-            <div className="shadow" />
+            <div className="shadow-90" />
             <div>
               <h4 className="sect-subtitle prototype-subtitle" style={{ marginBottom: "0" }}>
                 <EncryptedText text={t.fromIdea} baseSpeed={120} variance={600} maxLineLength={11} />
@@ -132,20 +146,22 @@ export default function Page() {
               <EncryptedText text={t.roadmapTitle.slice(1)} baseSpeed={120} variance={600} />
             </span>
           </h4>
-          <div className="shadow" style={{ zIndex: "2", height: "100%" }} />
-          <p className="sect-text slides" style={{ zIndex: "4" }}>{t.roadmapSubtitle}</p>
+          <div className="flex">
+          <div className="shadow-mini" style={{ zIndex: "3" }} />
+          <p className="sect-text slides" style={{ zIndex: "4", width: "100%" }}>{t.roadmapSubtitle}</p>
+          </div>
         </div>
 
         <RoadMap />
 
         {projectUi?.video ? (
           <div className="prototype video" >
-            <div className="shadow max-width" style={{ zIndex: "2" }} />
+            <div className="shadow max-width" style={{ zIndex: "3" }} />
 
             <div className="prototype-flex">
               <div className="prototype-video-col">
                 <div className="prototype-text">
-                  <h4 className="sect-subtitle prototype-subtitle video">
+                  <h4 className="sect-subtitle prototype-subtitle video"  style={{ position:"relative", zIndex: "5" }}>
                     <span>
                       {t.resultTitle[0]}
                       <EncryptedText text={t.resultTitle.slice(1)} baseSpeed={120} variance={600} />
@@ -178,7 +194,7 @@ export default function Page() {
                 <EncryptedText text={t.resultTitle.slice(1)} baseSpeed={120} variance={600} />
               </span>
             </h4>
-            <div className="shadow" style={{ zIndex: "2" }} />
+            <div className="shadow" style={{ zIndex: "3" }} />
             <p className="sect-text slides" style={{ zIndex: "5" }}>{textProdSect}</p>
             <span>
               <div className="slider-wrapper-slide">
@@ -192,7 +208,7 @@ export default function Page() {
         )}
 
         <Footer />
-        <GridOverlayVert />
+        <GridOverlay className="grid-unified--vertical-only" waveClassName="wave" />
       </section>
     </main>
   );

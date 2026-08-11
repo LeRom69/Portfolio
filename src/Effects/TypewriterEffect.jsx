@@ -13,7 +13,6 @@ export default function Typewriter({
 
   const indexRef = useRef(0);
 
-  // Следим за появлением на экране
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -32,7 +31,6 @@ export default function Typewriter({
     return () => observer.disconnect();
   }, []);
 
-  // Печать
   useEffect(() => {
     if (!isVisible) {
       indexRef.current = 0;
@@ -61,7 +59,6 @@ export default function Typewriter({
 
   return (
     <span ref={ref} className="typewriter">
-      {/* Невидимый текст резервирует место */}
       <span
         className="typewriter-placeholder"
         aria-hidden="true"
@@ -69,7 +66,6 @@ export default function Typewriter({
         {text}
       </span>
 
-      {/* Видимый текст поверх */}
       <span className="typewriter-live">
         {displayText}
 

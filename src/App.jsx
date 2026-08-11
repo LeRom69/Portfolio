@@ -1,33 +1,37 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Main from "./Pages/Main";
-import ProjectShowcaseGrafDis from "./Pages/ProjectShowcase-GrafDis";
-import ProjectShowcaseUI from "./Pages/ProjectShowcase-ui";
-import NotFound from "./Pages/404";
+import { Suspense, lazy } from "react";
 
 import { LanguageProvider } from "./Languages/LanguageContext";
+import PageLoader from "./Component/PageLoader";
+
+const Main = lazy(() => import("./Pages/Main"));
+const ProjectShowcaseGrafDis = lazy(() => import("./Pages/ProjectShowcase-GrafDis"));
+const ProjectShowcaseUI = lazy(() => import("./Pages/ProjectShowcase-ui"));
+const NotFound = lazy(() => import("./Pages/404"));
 
 function App() {
   return (
     <LanguageProvider>
       <BrowserRouter basename="/Portfolio">
-        <Routes>
-          <Route path="/" element={<Main />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Main />} />
 
-          <Route
-            path="/visual-design/:webName"
-            element={<ProjectShowcaseGrafDis />}
-          />
+            <Route
+              path="/visual-design/:webName"
+              element={<ProjectShowcaseGrafDis />}
+            />
 
-          <Route
-            path="/uiux-design/:webName"
-            element={<ProjectShowcaseUI />}
-          />
+            <Route
+              path="/uiux-design/:webName"
+              element={<ProjectShowcaseUI />}
+            />
 
-          <Route path="/404" element={<NotFound />} />
+            <Route path="/404" element={<NotFound />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </LanguageProvider>
   );

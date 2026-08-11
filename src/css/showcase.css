@@ -40,7 +40,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    /* оставляем как есть */
+
     gap: 17px;
 }
 
@@ -53,7 +53,7 @@
 .prototype.video .prototype-flex .prototype-video-slider {
     width: 100%;
     align-self: stretch;
-    /* высота = высоте .prototype-video-col */
+
     display: flex;
 }
 
@@ -186,7 +186,6 @@
     mask-composite: exclude;
 }
 
-/* обёртка вокруг самой картинки */
 .image-inner {
     position: relative;
     width: 100%;
@@ -196,7 +195,6 @@
     overflow: hidden;
 }
 
-/* анимированная рамка на самой картинке — свет бежит по кругу */
 .image-inner::before {
     content: "";
     position: absolute;
@@ -294,8 +292,6 @@
     display: inline-block;
     z-index: 999;
     width: 100%;
-    /* было: calc(100% + 14px) */
-    /* margin-left убрать полностью */
 }
 
 .offer-icon {
@@ -376,7 +372,6 @@
         order: 1;
     }
 
-    /* Видео-секция: текст+видео первым, вертикальный слайдер — под видео */
     .prototype.video .prototype-flex>div:first-child {
         order: 1;
         width: 100%;
@@ -387,7 +382,6 @@
         width: 100%;
     }
 
-    /* iframe/video растягивается на всю ширину */
     .card-video {
         margin-left: 0;
         width: 100%;
@@ -417,16 +411,6 @@
         width: 100%;
     }
 
-    .card-title {
-        margin-top: 2px;
-    }
-
-    p.card-desc {
-        margin: 8px 0;
-        margin-bottom: 16px;
-    }
-
-    /* Убираем max-height чтобы контент не обрезался */
     .prototype {
         max-height: none;
         padding-bottom: 20px;

@@ -24,8 +24,6 @@
   background-color: #020617;
   border-radius: 10px;
 
-  /* Изолируем repaint SVG от остального layout — сам SVG анимируется
-     постоянно (SMIL), но не должен пересчитывать geometry соседей. */
   contain: layout;
 }
 
@@ -47,9 +45,7 @@
   stroke-dasharray: 130 70;
   stroke-dashoffset: 0;
   animation: flow 6.5s linear infinite;
-  /* Было 3 стека drop-shadow — каждый это отдельный blur-проход, все три
-     пересчитываются на каждый кадр анимации. Свели к одному drop-shadow
-     покрупнее — визуально почти неотличимо, а стоимость в разы меньше. */
+  
   filter: drop-shadow(0 0 10px rgba(200, 140, 255, 0.85));
   will-change: filter;
 }

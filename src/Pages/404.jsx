@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../css/404.css";
 
-import GridOverlayVert from "../Grids/GridOverlay-Vertical";
+import GridOverlay from "../Grids/GridOverlay";
 import Fog from "../Effects/Fog";
 
 import { useGlobalMouse } from "../Effects/useGlobalMouse";
@@ -18,7 +18,7 @@ export default function NotFound() {
   return (
     <main className="notfound">
       <Fog />
-      <GridOverlayVert />
+      <GridOverlay className="grid-unified--vertical-only" waveClassName="wave" />
       <div className="ftf-wrapper">
         <h1>404</h1>
         <div style={{position:"relative", zIndex:"2"}}>

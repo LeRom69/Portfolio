@@ -1,0 +1,307 @@
+/* grid-unified.css */
+
+:root {
+  --vw140: calc(100vw / 140);
+  --hole-size: 6px;
+  --hole-punch:
+    radial-gradient(circle,
+      transparent 0,
+      transparent calc(var(--hole-size) - 2px),
+      #000 calc(var(--hole-size) - 2px));
+
+  --hole-mask:
+    radial-gradient(circle,
+      #000 0,
+      #000 calc(var(--hole-size) - 1px),
+      transparent calc(var(--hole-size) - 1px));
+}
+
+
+@property --wx {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --wy {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --wave-radius {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+.grid-unified {
+  position: absolute;
+  inset: 0;
+  top: -2px;
+  z-index: 2;
+  width: 100%;
+  height: stretch;
+  overflow: hidden;
+
+  pointer-events: auto;
+  contain: paint;
+
+  --cell: clamp(57.3px, calc(8 * var(--vw140)), 110px);
+  --edge: clamp(18px, calc(4.2 * var(--vw140)), 59px);
+
+  /* граница hero-зоны, выставляется JS-ом (ResizeObserver по реальной
+     высоте hero). Используется __h-lines (статика) и обоими
+     псевдоэлементами __glow (подсветка курсора). */
+  --main-h: 100vh;
+
+  --x: var(--px);
+  --y: var(--py);
+}
+
+/* =========================
+   🌌 ВЕРТИКАЛЬНЫЕ ЛИНИИ — БАЗА
+   Один непрерывный background на всю высоту — вертикальная сетка ниже
+   hero является физическим продолжением этих же линий, без обрыва.
+========================= */
+.grid-unified::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(90deg, rgba(164, 164, 209, 0.353) 1px, transparent 2px);
+
+  background-size: var(--cell) var(--cell);
+  background-position: var(--edge) 0;
+
+  mask-image:
+    var(--hole-punch),
+    linear-gradient(to bottom,
+      transparent 0,
+      transparent calc(var(--main-h) - 220px),
+      black var(--main-h));
+  mask-size: var(--cell) var(--cell), 100% 100%;
+  mask-position:
+    calc(var(--edge) - var(--cell) / 2) calc(var(--cell) / -2),
+    0 0;
+  mask-repeat: repeat, no-repeat;
+  mask-composite: add;
+
+  animation: breathe 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-unified::before {
+    animation: none;
+  }
+}
+
+/* =========================
+   🎯 ГОРИЗОНТАЛЬНЫЕ ЛИНИИ + ТОЧКИ (статика, только в hero-зоне)
+========================= */
+.grid-unified__h-lines {
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(rgba(164, 164, 209, 0.353) 1px, transparent 2px);
+
+  background-size: var(--cell) var(--cell);
+  background-position: var(--edge) 0;
+
+  animation: breathe 6s ease-in-out infinite;
+
+  mask-image:
+    linear-gradient(to bottom,
+      black 0,
+      black calc(var(--main-h) - 220px),
+      transparent var(--main-h)),
+    var(--hole-punch);
+  mask-size: 100% 100%, var(--cell) var(--cell);
+  mask-position:
+    0 0,
+    calc(var(--edge) - var(--cell) / 2) calc(var(--cell) / -2);
+  mask-repeat: no-repeat, repeat;
+  mask-composite: intersect;
+}
+
+.grid-unified__h-lines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  mask-image:
+    var(--hole-mask),
+    linear-gradient(to bottom,
+      black 0,
+      black calc(var(--x) - 220px),
+      transparent var(--y));
+  mask-size: var(--cell) var(--cell), 100% 100%;
+  mask-position:
+    calc(var(--edge) - var(--cell) / 2) calc(var(--cell) / -2),
+    0 0;
+  mask-repeat: repeat, no-repeat;
+  mask-composite: intersect;
+
+  background: rgba(164, 164, 209, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-unified__h-lines {
+    animation: none;
+  }
+}
+
+/* =========================
+   🧿 GLOW 
+========================= */
+.grid-unified__glow {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.grid-unified__glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+
+  background-image:
+    linear-gradient(rgba(220, 240, 255, 1) 1px, transparent 2px),
+    linear-gradient(90deg, rgba(220, 240, 255, 1) 1px, transparent 2px);
+
+  background-size: var(--cell) var(--cell);
+  background-position: var(--edge) 0;
+
+  mask-image:
+    radial-gradient(circle at var(--x) var(--y), black 0px, black 1px, transparent 120px),
+    linear-gradient(to bottom,
+      black 0,
+      black calc(var(--main-h) - 220px),
+      transparent var(--main-h));
+  mask-repeat: no-repeat, no-repeat;
+  mask-size: 100% 100%, 100% 100%;
+  mask-composite: intersect;
+
+  filter: drop-shadow(0 0 18px rgba(120, 180, 255, 0.6));
+}
+
+.grid-unified__glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(90deg, rgba(220, 240, 255, 1) 1px, transparent 2px);
+
+  background-size: var(--cell) var(--cell);
+  background-position: var(--edge) 0;
+
+  mask-image:
+    radial-gradient(circle at var(--x) var(--y), black 0px, black 1px, transparent 120px),
+    linear-gradient(to bottom,
+      transparent 0,
+      transparent calc(var(--main-h) - 220px),
+      black var(--main-h));
+  mask-repeat: no-repeat, no-repeat;
+  mask-size: 100% 100%, 100% 100%;
+  mask-composite: intersect;
+
+  filter: drop-shadow(0 0 18px rgba(120, 180, 255, 0.6));
+}
+
+.grid-unified.pointer-inside .grid-unified__glow {
+  opacity: 1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .grid-unified__glow {
+    display: none;
+  }
+}
+
+/* =========================
+   ⚡ WAVE
+========================= */
+.wave-layer {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9999;
+
+  background-image:
+    linear-gradient(rgb(255, 255, 255) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgb(255, 255, 255) 1.5px, transparent 1.5px);
+
+  background-size: var(--cell) var(--cell);
+  background-position: var(--edge) 0;
+
+  filter: drop-shadow(0 0 12px rgba(160, 220, 255, 0.95));
+
+  mask-image:
+    radial-gradient(circle at center, black 60%, transparent 100%),
+    var(--hole-mask);
+  mask-size: var(--cell) var(--cell), var(--cell) var(--cell);
+  mask-position: var(--edge) 0, var(--edge) 0;
+  mask-repeat: repeat;
+
+  clip-path: circle(var(--wave-radius) at var(--wx) var(--wy));
+}
+
+.grid-unified.wave .wave-layer {
+  animation: wave 1.2s ease-out forwards;
+  will-change: clip-path, opacity;
+}
+
+.grid-unified::before,
+.grid-unified__h-lines,
+.grid-unified__h-lines::after,
+.grid-unified__glow::before,
+.grid-unified__glow::after,
+.wave-layer {
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.grid-unified--vertical-only {
+  --main-h: 0px;
+}
+
+@keyframes wave {
+  0% {
+    --wave-radius: 0px;
+    opacity: 1;
+  }
+
+  100% {
+    --wave-radius: 1800px;
+    opacity: 0;
+  }
+}
+
+@keyframes breathe {
+  0% {
+    opacity: 0.75;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.75;
+  }
+}

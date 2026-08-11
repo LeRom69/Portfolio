@@ -1,12 +1,6 @@
 /*
   fog.css
   
-  mask-image / mask-composite намеренно отсутствуют — они строятся
-  динамически в FogLayer.jsx через spotlightStore, чтобы поддерживать
-  произвольное количество одновременных Spotlight-дырок.
-
-  CSS-переменные --spotlight-x/y/r/strength/feather больше не нужны
-  и удалены. Управление туманом полностью на стороне JS.
 */
 
 .fog-layer {
@@ -28,11 +22,6 @@
 
   mix-blend-mode: multiply;
 
-  /*
-    Transition только для курсорной маски (--x/--y).
-    Spotlight-дырки обновляются напрямую через style в JS —
-    без transition, чтобы избежать "полёта" из -9999px при маунте.
-  */
   transition: none;
 }
 

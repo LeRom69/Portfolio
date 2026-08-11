@@ -1,6 +1,5 @@
 /* ==========================================================================
-   Уведомления формы (успех / ошибка) — PREMIUM LIQUID LIGHT
-   Добавьте этот блок в конец файла src/css/contact.css
+ PREMIUM LIQUID LIGHT
    ========================================================================== */
 
 @keyframes liquidPulse {
@@ -20,7 +19,7 @@
   align-items: center;
   gap: 12px;
   width: 100%;
-  max-width: 720px; /* Немного сузили для более аккуратного «капсульного» вида */
+  max-width: 720px; 
   padding: 0 24px;
   pointer-events: none;
 }
@@ -34,24 +33,22 @@
   align-items: center;
   gap: 16px;
   padding: 14px 22px;
-  border-radius: 100px; /* Идеальная круглая капсула */
+  border-radius: 100px; 
   font-size: 14px;
   font-family: "Montserrat Alternates", serif;
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: -0.01em;
   
-  /* Улучшенный стеклянный эффект */
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   
-  /* Анимация плавного «дыхания» света */
   animation: liquidPulse 4s infinite ease-in-out;
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
 }
 
 .form-alert:hover {
-  transform: translateY(-2px); /* Интерактивный микро-отклик при наведении */
+  transform: translateY(-2px); 
 }
 
 .form-alert__icon {
@@ -62,7 +59,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08); /* Подложка под иконку для объема */
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .form-alert__text {
@@ -125,12 +122,11 @@
 }
 
 /* ==========================================================================
-   Успех (Neon Mint Juice)
+  (Neon Mint Juice)
    ========================================================================== */
 .form-alert--success {
   --glow-color: rgba(34, 197, 94, 0.25);
   
-  /* Глубокий жидкий градиент + верхний белый глянцевый блик */
   background: 
     linear-gradient(to bottom, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
     linear-gradient(135deg, rgba(5, 14, 9, 0.75) 0%, rgba(3, 29, 13, 0.85) 100%);
@@ -146,12 +142,11 @@
 }
 
 /* ==========================================================================
-   Ошибка (Electric Rose Wine)
+  (Electric Rose Wine)
    ========================================================================== */
 .form-alert--error {
   --glow-color: rgba(239, 68, 68, 0.25);
   
-  /* Глубокий жидкий градиент + верхний белый глянцевый блик */
   background: 
     linear-gradient(to bottom, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
     linear-gradient(135deg, rgba(14, 5, 5, 0.75) 0%, rgba(29, 3, 3, 0.85) 100%);
@@ -166,9 +161,6 @@
   text-shadow: 0 0 10px rgba(248, 113, 113, 0.6);
 }
 
-/* ==========================================================================
-   Вспомогательные элементы и адаптив
-   ========================================================================== */
 
 .turnstile-widget {
   margin: 12px 0;
@@ -183,6 +175,6 @@
   .form-alert {
     padding: 12px 18px;
     gap: 12px;
-    border-radius: 100px; /* На мобильных сохраняем форму капсулы */
+    border-radius: 100px; 
   }
 }

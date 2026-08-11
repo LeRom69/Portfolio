@@ -14,7 +14,7 @@
     "clsx": "^2.1.1",
     "embla-carousel-auto-height": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "framer-motion": "^12.40.0",
+    "framer-motion": "^13.1.0",
     "html2canvas": "^1.4.1",
     "lucide-react": "^1.21.0",
     "react": "^19.2.6",

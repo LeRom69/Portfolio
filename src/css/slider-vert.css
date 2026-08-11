@@ -1,15 +1,13 @@
 .embla-vertical {
   display: flex;
   flex-direction: row;
-    align-items: center;
-  /* было center — меняем на stretch */
+  align-items: center;
   gap: 18px;
   position: relative;
   z-index: 999;
   height: 100%;
 }
 
-/* === Главная карусель (ось Y, с масштабированием слайдов) === */
 .embla-vert {
   height: 560px;
   min-height: 0;
@@ -53,7 +51,6 @@
   border-radius: 12px;
 }
 
-/* === Миниатюры (горизонтальная лента снизу) === */
 .embla-thumbs {
   flex: 1;
   min-height: 0;
@@ -69,9 +66,9 @@
 .embla-thumbs__container {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  /* 8 колонок */
+
   grid-auto-rows: 1fr;
-  /* строки равной высоты */
+
   gap: 8px;
   height: 100%;
 }
@@ -89,7 +86,7 @@
 .embla-thumbs__slide__button {
   width: 100%;
   height: 100%;
-  /* ← кнопка = весь слайд */
+
   padding: 0;
   border: 2px solid transparent;
   border-radius: 8px;
@@ -102,13 +99,11 @@
 
 .embla-thumbs__slide--selected .embla-thumbs__slide__button {
   opacity: 1;
-border: 2px solid;
-border-image: linear-gradient(
-  90deg,
-  #00000000,
-  #ffffff,
-  rgba(0, 0, 0, 0)
-) 1;
+  border: 2px solid;
+  border-image: linear-gradient(90deg,
+      #00000000,
+      #ffffff,
+      rgba(0, 0, 0, 0)) 1;
 }
 
 .embla-thumbs__slide__button img {
@@ -158,7 +153,7 @@ border-image: linear-gradient(
   transition: transform 0.35s ease, box-shadow 0.35s ease, color 0.35s ease;
 }
 
-.embla-btn img{
+.embla-btn img {
   width: 14px;
   height: auto;
   position: relative;
@@ -293,7 +288,6 @@ border-image: linear-gradient(
 
   transition: height 0.35s ease;
 
-  /* ядро свечения */
   box-shadow:
     0 0 6px rgba(255, 255, 255, 0.35),
     0 0 14px rgba(205, 212, 255, 0.25),
@@ -302,7 +296,6 @@ border-image: linear-gradient(
   animation: embla-core-pulse 2.4s ease-in-out infinite;
 }
 
-/* внешний ореол */
 .embla-progress-fill::before {
   content: "";
   position: absolute;
@@ -371,13 +364,11 @@ border-image: linear-gradient(
   height: 100%;
 }
 
-/* Остальные стили без изменений... */
 .embla-vert {
   height: 540px;
   min-height: 0;
 }
 
-/* === Zoom-обёртка на слайде === */
 .embla__slide-zoom-wrap {
   position: relative;
   width: 100%;
@@ -422,18 +413,15 @@ border-image: linear-gradient(
   opacity: 1;
 }
 
-/* === Мобильный фолбэк: бегущая liquid-light рамка (только активный) === */
-@media (hover: none) {
+@media (hover: none) and (pointer: coarse) {
   .embla__slide-zoom-wrap--active::before {
     opacity: 1;
-    
-  padding: 1.2px;
-    background:  linear-gradient(
-  135deg,
-  #3b83f600,
-  #ffffff91,
-  #ec489a00
-)
+
+    padding: 1.2px;
+    background: linear-gradient(135deg,
+        #3b83f600,
+        #ffffff91,
+        #ec489a00)
   }
 }
 
@@ -446,7 +434,7 @@ border-image: linear-gradient(
   transition: filter 0.25s ease;
 }
 
-.embla__slide-zoom-wrap:hover > img {
+.embla__slide-zoom-wrap:hover>img {
   filter: brightness(0.6);
 }
 
@@ -534,9 +522,10 @@ border-image: linear-gradient(
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.lb-close img{
+.lb-close img {
   width: 12px;
   height: auto;
+  z-index: 400;
 }
 
 /* градиентная рамка */
@@ -614,7 +603,6 @@ border-image: linear-gradient(
   transform: translateY(-50%);
 
   z-index: 10;
-
   width: 44px;
   height: 44px;
 
@@ -628,41 +616,40 @@ border-image: linear-gradient(
 
   color: #ffffff;
 
-  background: rgba(5, 6, 20, 0.95);
+  background: none;
 
-  overflow: hidden;
   isolation: isolate;
+  overflow: hidden;
 
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
+
 .lb-nav img {
+  position: relative;
+  z-index: 4;
   width: 18px;
 }
-/* рамка */
+
+/* фон + рамка в одном слое, поверх глоу */
 .lb-nav::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1px;
+  z-index: 1;
 
-  background: linear-gradient(90deg,
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgb(5, 6, 20), rgb(5, 6, 20)) padding-box,
+    linear-gradient(90deg,
       rgba(133, 131, 144, 0.6),
       rgba(255, 255, 255, 0.85),
-      rgba(133, 131, 144, 0.6));
-
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+      rgba(133, 131, 144, 0.6)) border-box;
 
   pointer-events: none;
-  z-index: 2;
 }
 
-/* glow слой */
+/* glow слой — всегда под фоном */
 .lb-nav::after {
   content: "";
   position: absolute;
@@ -676,12 +663,12 @@ border-image: linear-gradient(
 
   filter: blur(12px);
   opacity: 0;
-
-  transform: scale(1.6);
+  transform: scale(1.2);
 
   transition: opacity 0.4s ease, transform 0.6s ease;
 
-  z-index: 1;
+  z-index: 2;
+  pointer-events: none;
 }
 
 /* hover */
@@ -807,7 +794,11 @@ border-image: linear-gradient(
 
 .lb-thumb--active {
   opacity: 1;
-  border-color: #3b82f6;
+  border: 2px solid;
+  border-image: linear-gradient(90deg,
+      #00000000,
+      #ffffff,
+      rgba(0, 0, 0, 0)) 1;
 }
 
 .lb-thumb img {
@@ -826,6 +817,7 @@ border-image: linear-gradient(
     flex-direction: column;
     padding-right: 0;
   }
+
   .embla-vert {
     height: 420px;
     width: 100%;
@@ -837,7 +829,7 @@ border-image: linear-gradient(
     height: auto;
   }
 
-  .embla-btn img{
+  .embla-btn img {
     transform: rotate(-90deg);
   }
 
@@ -858,7 +850,7 @@ border-image: linear-gradient(
     height: 300px;
   }
 
-    .embla__slide-zoom-wrap{
+  .embla__slide-zoom-wrap {
     min-width: 100%;
   }
 
@@ -867,8 +859,8 @@ border-image: linear-gradient(
   }
 
   .lb-nav img {
-  width: 14px;
-}
+    width: 14px;
+  }
 
   .lb-nav {
     width: 36px;
@@ -889,7 +881,7 @@ border-image: linear-gradient(
   display: none;
 }
 
-.embla-zoom-btn-mobile img{
+.embla-zoom-btn-mobile img {
   width: 24px;
   height: auto;
   filter: blur(0.4px);
@@ -902,9 +894,10 @@ border-image: linear-gradient(
     display: none;
   }
 
-  .embla__slide-zoom-wrap{
+  .embla__slide-zoom-wrap {
     min-width: 100%;
   }
+
   .embla-sidebar {
     justify-content: center;
   }
@@ -935,12 +928,12 @@ border-image: linear-gradient(
     transition: transform 0.35s ease, box-shadow 0.35s ease;
   }
 
-  .embla-btn{
-       width: 40px;
+  .embla-btn {
+    width: 40px;
     height: 40px;
   }
 
-  .embla-btn svg{
+  .embla-btn svg {
     width: 20px;
     height: 20px;
     transform: rotate(-90deg);
@@ -1004,7 +997,7 @@ border-image: linear-gradient(
     filter: drop-shadow(0 0 6px rgba(140, 150, 255, 0.4));
   }
 
-   .embla-progress-track {
+  .embla-progress-track {
     width: 100%;
     height: 6px;
   }
@@ -1017,13 +1010,11 @@ border-image: linear-gradient(
     width: 0;
     height: 100%;
 
-    background: linear-gradient(
-      90deg,
-      #e3e5ff,
-      #cdd4ff,
-      #f0b5ff,
-      #ea96ff
-    );
+    background: linear-gradient(90deg,
+        #e3e5ff,
+        #cdd4ff,
+        #f0b5ff,
+        #ea96ff);
 
     transition: width 0.35s ease;
   }
@@ -1037,7 +1028,7 @@ border-image: linear-gradient(
     height: 36px;
   }
 
-    .embla__slide-zoom-wrap{
+  .embla__slide-zoom-wrap {
     min-width: 100%;
   }
 

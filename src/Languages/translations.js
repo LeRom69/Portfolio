@@ -4,6 +4,7 @@ const translations = {
     nav: {
       home: "HOME",
       works: "WORKS",
+      links: "LINKS",
       ui: "UI/UX",
       branding: "Branding",
       illustrations: "Illustrations",
@@ -116,6 +117,7 @@ const translations = {
     nav: {
       home: "ГОЛОВНА",
       works: "РОБОТИ",
+      links: "ПОСИЛАННЯ",
       ui: "UI/UX",
       branding: "Брендинг",
       illustrations: "Ілюстрації",

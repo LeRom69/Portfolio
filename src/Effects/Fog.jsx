@@ -29,7 +29,6 @@ export default function Fog() {
     };
   }, []);
 
-  // На мобильных не рендерим вообще ничего
   if (isMobile) return null;
 
   return <FogLayer />;

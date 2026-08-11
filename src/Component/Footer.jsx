@@ -37,9 +37,12 @@ export default function Footer() {
 
         {/* CENTER LINKS */}
         <div className="fx-links">
-          <a href="https://www.behance.net/ValeriiaRomanishyna">BEHANCE</a>
-          <a href="https://www.linkedin.com/in/valeriia-romanishyna69">LINKEDIN</a>
-          <a href="mailto:v.designer007591@gmail.com">EMAIL</a>
+          <a href="https://www.behance.net/ValeriiaRomanishyna" target="_blank"
+            rel="noopener noreferrer">BEHANCE</a>
+          <a href="https://www.linkedin.com/in/valeriia-romanishyna69" target="_blank"
+            rel="noopener noreferrer">LINKEDIN</a>
+          <a href="mailto:v.designer007591@gmail.com" target="_blank"
+            rel="noopener noreferrer">EMAIL</a>
         </div>
 
         {/* RIGHT INFO */}

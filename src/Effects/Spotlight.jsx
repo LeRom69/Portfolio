@@ -1,18 +1,6 @@
 import { useId, useMemo, useRef, useLayoutEffect } from "react";
 import { spotlightStore } from "../js/spotlightStore";
 
-/**
- * Spotlight beam — жёсткий направленный луч света (как от прожектора),
- * а не мягкое радиальное свечение. Треугольный конус с затуханием по
- * длине через linearGradient + легкая растушёвка краёв.
- *
- * Публикует свою экранную позицию в spotlightStore, чтобы FogLayer
- * мог "прокусить" туман сразу в нескольких местах независимо.
- *
- * Луч и дырка в тумане видны сразу, без ожидания появления элемента
- * в вьюпорте — позиция просто живо пересчитывается при любых
- * изменениях лейаута (resize/scroll/загрузка шрифтов и картинок).
- */
 export function Spotlight({
   className = "",
   fill = "#bcd0ff99",
@@ -69,8 +57,6 @@ export function Spotlight({
     return { apex, p1, p2, farMid, hotspot, hotspotR, minX, minY, width, height };
   }, [angle, spreadAngle, length]);
 
-  // Луч виден сразу (opacity: 1), пульсация — просто периодическая
-  // анимация без "въезда"/reveal.
   const animation = pulse
     ? `spotlight-pulse-${id} ${pulseDuration}s ease-in-out infinite`
     : "none";
@@ -93,18 +79,9 @@ export function Spotlight({
     });
   }, [fog, fogCount, fogSpread, geo.hotspot]);
 
-  // Публикуем позицию в store синхронно, до первой отрисовки браузером
-  // (useLayoutEffect), без rAF-тика — дырка в тумане появляется в том
-  // же кадре, что и сам спотлайт, без единого пропущенного тика.
   useLayoutEffect(() => {
     if (!clearsFog) return;
 
-    // baseline — результат ПОСЛЕДНЕГО настоящего замера (getBoundingClientRect)
-    // вместе со scrollX/scrollY на тот момент. На scroll мы больше НЕ читаем
-    // layout заново — просто сдвигаем сохранённую позицию на дельту скролла.
-    // Раньше getBoundingClientRect() дёргался на каждый scroll-тик — это
-    // был главный источник лагов при скролле (форсированный layout +
-    // полная пересборка CSS mask-image в FogLayer на каждый кадр).
     const baseline = { rect: null, scrollX: 0, scrollY: 0 };
     const lastPublished = { current: null };
 
@@ -114,9 +91,6 @@ export function Spotlight({
       const dy = window.scrollY - baseline.scrollY;
       const rect = baseline.rect;
 
-      // Округляем до целых px — суб-пиксельная точность тут не нужна,
-      // а FogLayer теперь дёшево обновляет только CSS-переменные, но
-      // незачем дёргать даже их на изменения меньше 1px во время скролла.
       const x = Math.round(rect.left + rect.width / 2 - dx);
       const y = Math.round(rect.top + rect.height / 2 - dy);
       const r = Math.round(Math.max(rect.width, rect.height) / 2 + fogClearPadding);
@@ -134,17 +108,11 @@ export function Spotlight({
       });
     };
 
-    // Настоящий (дорогой) замер — вызывается только при реальном
-    // изменении лейаута: маунт, resize, ResizeObserver, шрифты, картинки.
     const measure = () => {
       const el = glowRef.current;
       if (!el) return;
       let rect = el.getBoundingClientRect();
 
-      // Если размеры ещё нулевые (например, контейнер ждёт картинку/шрифт,
-      // чтобы досчитать финальную высоту через flex/grid) — не блокируем
-      // появление дырки ожиданием точного размера. Берём грубую оценку по
-      // ближайшему спозиционированному предку.
       if (rect.width === 0 && rect.height === 0) {
         const svgEl = el.ownerSVGElement;
         const parent = svgEl?.offsetParent || svgEl?.parentElement;
@@ -184,10 +152,6 @@ export function Spotlight({
     window.addEventListener("load", scheduleMeasure);
     document.fonts?.ready?.then(scheduleMeasure);
 
-    // Любая картинка на странице (даже соседняя, не сам спотлайт),
-    // которая догружается позже, может поменять layout флекс/грид
-    // контейнера, в котором сидит спотлайт. Слушаем 'load' в фазе
-    // capture, т.к. событие load у <img> не всплывает.
     const onAnyImageLoad = (e) => {
       if (e.target && e.target.tagName === "IMG") {
         scheduleMeasure();
@@ -198,22 +162,14 @@ export function Spotlight({
     const ro = new ResizeObserver(scheduleMeasure);
     if (glowRef.current) ro.observe(glowRef.current);
     if (svgEl?.parentElement) ro.observe(svgEl.parentElement);
-    // Раньше здесь ещё был ro.observe(document.body) — ловил вообще любое
-    // изменение лейаута на странице (даже в далёких, не связанных блоках),
-    // что означало лишний measure()+publish() на каждый такой чих. Убрали:
-    // соседние блоки, которые реально сдвигают колонку со спотлайтом,
-    // почти всегда сами участвуют в изменении родителя/картинок/шрифтов,
-    // которые уже отслеживаются выше.
 
     window.addEventListener("resize", scheduleMeasure);
-    // capture: true — ловим scroll и во вложенных скролл-контейнерах
-    // (событие scroll не всплывает). passive — не мешаем самому скроллу.
+
     window.addEventListener("scroll", scheduleScrollPublish, {
       passive: true,
       capture: true,
     });
 
-    // Первая публикация — синхронно, до отрисовки.
     measure();
 
     return () => {
@@ -299,10 +255,7 @@ export function Spotlight({
           </filter>
 
           {fog && (
-            /* Было x/y=-200%, width/height=500% при stdDeviation=70 —
-               браузер растеризовал область в 25 раз больше самой частицы
-               на каждую из fogCount частиц, каждый кадр. Урезано под
-               реальный радиус блюра. */
+
             <filter
               id={`spotlight-fog-filter-${id}`}
               x="-120%"
@@ -323,7 +276,6 @@ export function Spotlight({
           filter={`url(#spotlight-edge-${id})`}
         />
 
-        {/* Невидимый маркер для измерения позиции ядра свечения */}
         <circle
           ref={glowRef}
           cx={geo.hotspot.x}

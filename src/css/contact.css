@@ -51,8 +51,8 @@
 .contact-title {
     margin: 0;
     font-family: "Novem", sans-serif;
-    font-size: 72px;
-    line-height: 0.95;
+    font-size: clamp(14px, 4.8vw, 72px);
+    line-height: 1.2;
     font-weight: 600;
 
     letter-spacing: 2px;
@@ -441,7 +441,6 @@
     object-fit: cover;
     opacity: 0.8;
 
-    z-index: -9999;
 
     pointer-events: none;
 }
@@ -479,11 +478,6 @@
     animation: float 6s ease-in-out infinite;
 }
 
-/* ==========================================================================
-   Кликабельная область баблов — растягиваем ссылку на всю окружность,
-   сама .bubble (позиция, float-анимация) не меняется
-   ========================================================================== */
-
 .bubble a {
     position: absolute;
     inset: 0;
@@ -502,7 +496,6 @@
     cursor: pointer;
 }
 
-/* лёгкая обратная связь при наведении/фокусе — не смещает бабл */
 .bubble a:hover,
 .bubble a:focus-visible {
     color: #ffffff;
@@ -574,7 +567,7 @@
     animation-delay: 2s;
 }
 
-.turnstile-widget{
+.turnstile-widget {
     position: relative;
     z-index: 9999;
 }
@@ -613,10 +606,6 @@
     .contact-left,
     .contact-right {
         width: 100%;
-    }
-
-    .contact-title {
-        font-size: 47px;
     }
 
     .contact-label {
@@ -658,10 +647,6 @@
     .contact-section {
         padding: 60px calc(1.5 * (var(--gutter)));
         padding-bottom: 30px;
-    }
-
-    .contact-title {
-        font-size: 44px;
     }
 
     .contact-row {
@@ -715,7 +700,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 570px) {
     .contact-right {
         height: 110px;
     }
@@ -748,6 +733,10 @@
     .bubble-2 {
         right: 0%;
 
+    }
+
+    .contact-title {
+        font-size: clamp(24px, 9.2vw, 42px);
     }
 
     .bubble-3 {

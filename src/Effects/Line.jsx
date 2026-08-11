@@ -13,7 +13,6 @@ export default function Line() {
 
       const rect = lineRef.current.getBoundingClientRect();
 
-      // позиция мыши относительно линии
       const x = p.x - rect.left;
       const y = p.y - rect.top;
 

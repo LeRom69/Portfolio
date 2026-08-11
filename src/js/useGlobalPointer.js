@@ -24,10 +24,6 @@ function flushHover() {
   emit();
 }
 
-// hover update — троттлим до одного React-ререндера за кадр.
-// Раньше setPointer дёргал emit() на КАЖДЫЙ mousemove (сотни раз/сек),
-// и все компоненты на usePointerSync() ре-рендерились чаще, чем
-// браузер вообще успевает отрисовать кадр — отсюда лаги.
 export function setPointer(x, y) {
   pendingX = x;
   pendingY = y;
@@ -36,8 +32,6 @@ export function setPointer(x, y) {
   }
 }
 
-// click update — оставляем немедленным: кликов мало, и clickTime
-// должен быть точным, троттлить их не нужно и вредно.
 export function setPointerClick(x, y) {
   state = {
     ...state,
@@ -52,7 +46,6 @@ export function getPointerState() {
   return state;
 }
 
-// react subscription
 export function usePointerSync() {
   return useSyncExternalStore(
     (cb) => {
@@ -61,4 +54,56 @@ export function usePointerSync() {
     },
     () => state
   );
+}
+
+if (typeof window !== "undefined") {
+
+window.addEventListener(
+  "click",
+  (e) => {
+
+    const interactive = e.target.closest(
+      "button, a, input, textarea, select, [role='button'], [role='link']"
+    );
+
+    if (interactive) return;
+
+    setPointerClick(e.clientX, e.clientY);
+
+    const stack = document.elementsFromPoint(
+      e.clientX,
+      e.clientY
+    );
+
+    const gridEl =
+      stack.find(
+        (n) =>
+          n.classList?.contains("grid-unified") &&
+          n.classList.contains("pointer-inside")
+      ) ||
+      stack.find((n) =>
+        n.classList?.contains("grid-unified")
+      );
+
+    if (!gridEl) return;
+
+    const rect = gridEl.getBoundingClientRect();
+
+    const wx = e.clientX - rect.left;
+    const wy = e.clientY - rect.top;
+
+    gridEl.style.setProperty("--wx", `${wx}px`);
+    gridEl.style.setProperty("--wy", `${wy}px`);
+
+    const waveClassName =
+      gridEl.dataset.waveClass || "wave";
+
+    gridEl.classList.remove(waveClassName);
+
+    void gridEl.offsetWidth;
+
+    gridEl.classList.add(waveClassName);
+  },
+  true
+);
 }

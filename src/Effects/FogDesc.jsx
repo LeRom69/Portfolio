@@ -2,15 +2,8 @@ import { useLayoutEffect, useRef } from "react";
 import { spotlightStore } from "../js/spotlightStore";
 import "../css/fog.css";
 
-// Максимум одновременных "дырок" (активных Spotlight на странице).
-// Почти всегда их 1-3, поэтому запас с большим избытком. Если реально
-// смонтировано больше — лишние просто не получат дырку (не критично,
-// сами просили не гнаться за идеальной точностью, а снизить нагрузку).
 const MAX_HOLES = 6;
 
-// Инертные значения для незанятого слота: r=0 и strength=1 (полностью
-// "чёрная" маска в этой точке) — то есть слот физически ничего не
-// прожигает в тумане, пока не занят конкретным Spotlight.
 const INERT = { x: "-99999px", y: "-99999px", r: "0px", feather: "1px", strength: "1" };
 
 function buildMaskTemplate() {
@@ -34,11 +27,6 @@ function buildMaskTemplate() {
   return [cursor, ...slots].join(", ");
 }
 
-// Строится один раз на модуль — сама СТРОКА mask-image никогда больше
-// не пересобирается и не переприсваивается. Всё дальнейшее обновление
-// позиций дырок идёт исключительно через CSS custom properties
-// (el.style.setProperty), это на порядки дешевле, чем каждый раз
-// заново парсить и применять новый multi-gradient mask-image.
 const MASK_TEMPLATE = buildMaskTemplate();
 const MASK_COMPOSITE = Array(1 + MAX_HOLES).fill("intersect").join(", ");
 const MASK_COMPOSITE_WEBKIT = Array(1 + MAX_HOLES).fill("source-in").join(", ");
@@ -46,7 +34,6 @@ const MASK_COMPOSITE_WEBKIT = Array(1 + MAX_HOLES).fill("source-in").join(", ");
 export default function FogLayer() {
   const fogRef = useRef(null);
 
-  // id спотлайта -> номер слота (0..MAX_HOLES-1). Слоты переиспользуются.
   const slotOfId = useRef(new Map());
   const freeSlots = useRef(null);
 
@@ -70,7 +57,6 @@ export default function FogLayer() {
     const el = fogRef.current;
     if (!el) return;
 
-    // Маска и mask-composite ставятся ОДИН РАЗ. Дальше — только vars.
     el.style.transition = "none";
     el.style.maskImage = MASK_TEMPLATE;
     el.style.webkitMaskImage = MASK_TEMPLATE;
@@ -98,13 +84,10 @@ export default function FogLayer() {
         let slot = slotOfId.current.get(id);
         if (slot === undefined) {
           slot = freeSlots.current.pop();
-          if (slot === undefined) continue; // слотов не осталось — пропускаем
+          if (slot === undefined) continue; 
           slotOfId.current.set(id, slot);
         }
 
-        // Округляем — суб-пиксельная точность тут не нужна, а лишний
-        // repaint от дробных значений (особенно во время скролла) это
-        // чистые потери.
         setSlotVars(el, slot, {
           x: Math.round(h.x),
           y: Math.round(h.y),
@@ -114,7 +97,6 @@ export default function FogLayer() {
         });
       }
 
-      // Освобождаем слоты для размонтированных Spotlight.
       for (const [id, slot] of slotOfId.current) {
         if (!seenIds.has(id)) {
           slotOfId.current.delete(id);
@@ -131,7 +113,6 @@ export default function FogLayer() {
     };
   }, []);
 
-  // Курсор мыши — троттлинг через rAF, обновляем только 2 CSS-переменные.
   useLayoutEffect(() => {
     const el = fogRef.current;
     if (!el) return;

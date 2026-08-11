@@ -20,7 +20,6 @@
     margin: 0 clamp(12px, 3vw, 54px);
     flex: 1 1 auto;
     min-width: 0;
-    /* критично — снимает блок на min-content */
 
 }
 
@@ -62,7 +61,6 @@
 
 /* ICON */
 
-/* внутренний слой */
 .icon-img {
     width: 36px;
     height: 36px;
@@ -167,7 +165,6 @@
         transform: none !important;
     }
 
-    /* Иконка ВСЕГДА по центру */
     .roadmap-icon {
         position: absolute;
         left: 50%;
@@ -175,14 +172,12 @@
         z-index: 5;
     }
 
-    /* текст */
     .roadmap-content {
         width: calc(50% - 55px);
         display: flex;
         flex-direction: column;
     }
 
-    /* нечётные — текст справа */
     .roadmap-step-wrapper:nth-child(odd) .roadmap-content {
         margin-left: calc(50% + 55px);
         text-align: left;
@@ -191,7 +186,6 @@
         align-items: flex-start;
     }
 
-    /* чётные — текст слева */
     .roadmap-step-wrapper:nth-child(even) .roadmap-content {
         margin-right: calc(50% + 55px);
         text-align: right;
@@ -236,7 +230,6 @@
         border-radius: 999px;
     }
 
-    /* ЖИДКИЙ СВЕТ (flow слой) */
     .roadmap-line::before,
     .roadmap-line::after {
         content: "";
@@ -272,6 +265,22 @@
         width: 32px;
         height: 32px;
         margin: 0 -6px;
+    }
+}
+
+@media (max-width:420px) {
+    .desc {
+        max-width: none;
+        font-size: 12px;
+        padding-top: 6px;
+    }
+}
+
+@media (max-width:350px) {
+    .desc {
+        max-width: none;
+        font-size: 11px;
+        padding-top: 6px;
     }
 }
 
