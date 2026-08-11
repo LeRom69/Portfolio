@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { subscribePointer, initPointer } from "../js/pointerStore";
 import { useLang } from "../Languages/LanguageContext";
 import translations from "../Languages/translations";
@@ -111,7 +112,18 @@ return (
       {resolvedDesc && (
         <p className="card-desc">{resolvedDesc}</p>
       )}
+    <div className="creation-overlay">
+      {resolvedTitle && (
+        <h3 className="card-title">{resolvedTitle}</h3>
+      )}
 
+      {resolvedDesc && (
+        <p className="card-desc">{resolvedDesc}</p>
+      )}
+
+      <span className="card-link">
+        {t.viewProject}
+      </span>
       <span className="card-link">
         {t.viewProject}
       </span>
@@ -121,3 +133,4 @@ return (
   </a>
 );
 }
+

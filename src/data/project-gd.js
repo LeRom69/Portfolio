@@ -1,6 +1,9 @@
 const asset = (path) =>
   `${process.env.PUBLIC_URL}${path}`;
 
+const asset = (path) =>
+  `${process.env.PUBLIC_URL}${path}`;
+
 const projectsGD = [
   {
     id: 0,
