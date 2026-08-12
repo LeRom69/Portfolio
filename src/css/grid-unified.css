@@ -39,7 +39,7 @@
   position: absolute;
   inset: 0;
   top: -2px;
-  z-index: 2;
+  z-index: 1;
   width: 100%;
   height: stretch;
   overflow: hidden;
@@ -70,7 +70,7 @@
   inset: 0;
 
   background-image:
-    linear-gradient(90deg, rgba(164, 164, 209, 0.353) 1px, transparent 2px);
+    linear-gradient(90deg, rgba(126, 126, 152, 0.304) 1px, transparent 2px);
 
   background-size: var(--cell) var(--cell);
   background-position: var(--edge) 0;
@@ -107,7 +107,7 @@
   pointer-events: none;
 
   background-image:
-    linear-gradient(rgba(164, 164, 209, 0.353) 1px, transparent 2px);
+    linear-gradient(rgba(126, 126, 152, 0.304) 1px, transparent 2px);
 
   background-size: var(--cell) var(--cell);
   background-position: var(--edge) 0;

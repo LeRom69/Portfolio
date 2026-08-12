@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import GridOverlay from "../Grids/GridOverlay";
 import { useGlobalMouse } from "../Effects/useGlobalMouse";
-import Fog from "../Effects/FogDesc";
+import Fog from "../Effects/Fog";
 
 import Slider from "../Sliders/Slider";
 import RoadMap from "../Component/RoadMap-Gd";
@@ -104,15 +104,17 @@ export default function Page() {
           </div>
 
           <div className="prototype-flex-main">
-            <div className="shadow-90" />
             <div>
               <h4 className="sect-subtitle prototype-subtitle" style={{ paddingRight: "40px" }}>
                 <EncryptedText text={t.fromIdea} baseSpeed={120} variance={600} maxLineLength={11} />
               </h4>
               <SpotlightContainer background="transparent" spotlightProps={spotlightPropsCreate}>
+                <div className="flex">
+                   <div className="shadow-90" />
                 <p className="sect-text prototype">
                   {textCreatSect}
                 </p>
+                </div>
               </SpotlightContainer>
             </div>
 
@@ -128,15 +130,15 @@ export default function Page() {
 
         {/* ROADMAP */}
         <div className="slides-container">
-          <h4 className="sect-subtitle slides-container" style={{ zIndex: "4" }}>
+          <h4 className="sect-subtitle slides-container" style={{ zIndex: "6" }}>
             <span>
               {t.roadmapTitle[0]}
               <EncryptedText text={t.roadmapTitle.slice(1)} baseSpeed={120} variance={600} />
             </span>
           </h4>
           <div className="flex">
-            <div className="shadow-mini" style={{ zIndex: "2" }} />
-            <p className="sect-text slides" style={{ zIndex: "4", width: "100%" }}>{t.roadmapSubtitle}</p>
+            <div className="shadow-mini" style={{ zIndex: "3" }} />
+            <p className="sect-text slides" style={{ zIndex: "6", width: "100%" }}>{t.roadmapSubtitle}</p>
           </div>
         </div>
 
@@ -151,15 +153,15 @@ export default function Page() {
             </span>
           </h4>
           <div className="flex-div">
-            <div className="shadow" style={{ zIndex: "2", filter: "blur(24px)", width: "66%" }} />
-            <p className="sect-text slides" style={{ zIndex: "5" }}>{textProdSect}</p>
+            <div className="shadow" style={{ zIndex: "3", filter: "blur(24px)", width: "66%" }} />
+            <p className="sect-text slides" style={{ zIndex: "6" }}>{textProdSect}</p>
           </div>
           <div className="slider-wrapper-slide">
             <Slider slides={slides} />
           </div>
 
           <div className="sect-text slides">
-            <div className="shadow-mini" style={{ zIndex: "1", margin: "0" }} />
+            <div className="shadow-mini" style={{ zIndex: "3", margin: "0" }} />
             <div style={{ position: "relative", zIndex: "6" }} dangerouslySetInnerHTML={{ __html: textAnnt }} />
           </div>
         </div>

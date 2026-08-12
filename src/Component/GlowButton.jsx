@@ -2,13 +2,9 @@ import React, { useId } from "react";
 import "../css/glow-button.css";
 
 export default function GlowButton({ children = "Get Started", onClick }) {
-  // Раньше: Math.random() на каждый рендер — все id внутри SVG (градиенты,
-  // фильтры, маски, mpath) менялись при каждом ре-рендере родителя, из-за
-  // чего SMIL-анимации (animateMotion) дёргались/перезапускались лишний раз.
-  // useId даёт стабильный id на весь жизненный цикл компонента.
+
   const uid = useId().replace(/:/g, "");
 
-  // Путь вычисляется из реальных размеров кнопки — подстраивается через ref + ResizeObserver
   const [w, setW] = React.useState(280);
   const [h, setH] = React.useState(50);
   const ref = React.useRef(null);
@@ -17,10 +13,6 @@ export default function GlowButton({ children = "Get Started", onClick }) {
   React.useLayoutEffect(() => {
     if (!ref.current) return;
 
-    // rAF-коалесинг: ResizeObserver может стрельнуть несколько раз за кадр
-    // (например при вложенных ресайзах родителей) — без этого каждый вызов
-    // синхронно триггерит setState/ре-рендер. setW/setH дополнительно не
-    // обновляются, если размер не изменился, чтобы не плодить лишние рендеры.
     let raf = 0;
     const measure = () => {
       raf = 0;
@@ -43,12 +35,9 @@ export default function GlowButton({ children = "Get Started", onClick }) {
       ro.disconnect();
       if (raf) cancelAnimationFrame(raf);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [children]);
 
-  // Ставим SMIL-анимации на паузу, когда кнопка вне вьюпорта. Если на странице
-  // много таких кнопок (например в списке/футере), не должны шевелиться те,
-  // что не видны — это чистый расход GPU/CPU без визуального эффекта.
   React.useEffect(() => {
     const svgEl = svgRef.current;
     if (!svgEl || typeof svgEl.pauseAnimations !== "function") return;
@@ -67,8 +56,8 @@ export default function GlowButton({ children = "Get Started", onClick }) {
     return () => io.disconnect();
   }, []);
 
-  const r = 10; // border-radius
-  const H = h; // реальная высота кнопки (раньше было захардкожено 100)
+  const r = 10; 
+  const H = h; 
   const d = `M${r},2 H${w - r} Q${w - 2},2 ${w - 2},${r} V${H - r} Q${w - 2},${H - 2} ${w - r},${H - 2} H${r} Q2,${H - 2} 2,${H - r} V${r} Q2,2 ${r},2 Z`;
 
   return (
@@ -101,10 +90,6 @@ export default function GlowButton({ children = "Get Started", onClick }) {
             </feMerge>
           </filter>
 
-          {/* Было x/y=-300%, width/height=700% — область растра фильтра росла
-              квадратично и на каждый кадр анимации браузер перерисовывал
-              область в ~50x больше самого спарка. Реальному блюру radius=3
-              с запасом хватает -60%/220%. */}
           <filter id={`spark-${uid}`} x="-60%" y="-60%" width="220%" height="220%">
             <feGaussianBlur stdDeviation="3" />
           </filter>
@@ -125,13 +110,10 @@ export default function GlowButton({ children = "Get Started", onClick }) {
           </mask>
         </defs>
 
-        {/* невидимый path для animateMotion */}
         <path id={`p-${uid}`} d={d} fill="none" stroke="none" />
 
-        {/* тонкая базовая рамка */}
         <path d={d} fill="none" stroke="rgba(160,108,255,0.15)" strokeWidth="1.5" />
 
-        {/* бегущий градиент с маской */}
         <path
           d={d}
           fill="none"
@@ -141,14 +123,12 @@ export default function GlowButton({ children = "Get Started", onClick }) {
           mask={`url(#mask-${uid})`}
         />
 
-        {/* искра — ореол */}
         <circle r="5" fill="#fff" filter={`url(#spark-${uid})`}>
           <animateMotion dur="2.5s" repeatCount="indefinite">
             <mpath href={`#p-${uid}`} />
           </animateMotion>
         </circle>
 
-        {/* искра — точка */}
         <circle r="1.5" fill="#fff">
           <animateMotion dur="2.5s" repeatCount="indefinite">
             <mpath href={`#p-${uid}`} />

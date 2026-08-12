@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import GridOverlay from "../Grids/GridOverlay";
 import { useGlobalMouse } from "../Effects/useGlobalMouse";
-import Fog from "../Effects/FogDesc";
+import Fog from "../Effects/Fog";
 
 import { useSectTitleDots } from "../js/useSectTitleDots";
 import TitleDot from "../Effects/TitleDot";
@@ -76,31 +76,31 @@ export default function Page() {
 
   const spotlightPropsCreate = isMobile
     ? {
-        fill: "#9492ba27",
-        top: "-330px",
-        left: "-132px",
-        length: "950",
-      }
+      fill: "#9492ba27",
+      top: "-330px",
+      left: "-132px",
+      length: "950",
+    }
     : {
-        fill: "#9492ba27",
-        top: "-380px",
-        left: "-200px",
-        length: "950",
-      };
+      fill: "#9492ba27",
+      top: "-380px",
+      left: "-200px",
+      length: "950",
+    };
 
   const spotlightPropsResult = isMobile
     ? {
-        fill: "#9492ba27",
-        top: "-220px",
-        left: "-100px",
-        length: "950",
-      }
+      fill: "#9492ba27",
+      top: "-220px",
+      left: "-100px",
+      length: "950",
+    }
     : {
-        fill: "#9492ba27",
-        top: "-220px",
-        left: "-100px",
-        length: "800",
-      };
+      fill: "#9492ba27",
+      top: "-220px",
+      left: "-100px",
+      length: "800",
+    };
 
   return (
     <main style={{ overflow: "hidden" }}>
@@ -117,15 +117,17 @@ export default function Page() {
           </div>
 
           <div className="prototype-flex-main">
-            <div className="shadow-90" />
             <div>
               <h4 className="sect-subtitle prototype-subtitle" style={{ marginBottom: "0" }}>
                 <EncryptedText text={t.fromIdea} baseSpeed={120} variance={600} maxLineLength={11} />
               </h4>
               <SpotlightContainer background="transparent" spotlightProps={spotlightPropsCreate}>
-                <p className="sect-text prototype">
-                  {textCreatSect}
-                </p>
+                <div className="flex">
+                  <div className="shadow-90" />
+                  <p className="sect-text prototype">
+                    {textCreatSect}
+                  </p>
+                </div>
               </SpotlightContainer>
             </div>
 
@@ -147,8 +149,8 @@ export default function Page() {
             </span>
           </h4>
           <div className="flex">
-          <div className="shadow-mini" style={{ zIndex: "3" }} />
-          <p className="sect-text slides" style={{ zIndex: "4", width: "100%" }}>{t.roadmapSubtitle}</p>
+            <div className="shadow-mini" style={{ zIndex: "3" }} />
+            <p className="sect-text slides" style={{ zIndex: "4", width: "100%" }}>{t.roadmapSubtitle}</p>
           </div>
         </div>
 
@@ -161,7 +163,7 @@ export default function Page() {
             <div className="prototype-flex">
               <div className="prototype-video-col">
                 <div className="prototype-text">
-                  <h4 className="sect-subtitle prototype-subtitle video"  style={{ position:"relative", zIndex: "5" }}>
+                  <h4 className="sect-subtitle prototype-subtitle video" style={{ position: "relative", zIndex: "5" }}>
                     <span>
                       {t.resultTitle[0]}
                       <EncryptedText text={t.resultTitle.slice(1)} baseSpeed={120} variance={600} />

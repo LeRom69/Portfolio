@@ -20,11 +20,7 @@ export default function Roadmap() {
   const steps = translations[lang].roadmapUi.map((s, i) => ({ ...s, icon: icons[i] }));
 
   const stepRefs = useRef([]);
-  // Курсор храним в ref, а НЕ в state — раньше subscribePointer(setPointer)
-  // ре-рендерил весь Roadmap (включая все GlowButton со сложным SVG) на
-  // КАЖДОЕ движение мыши по всей странице, даже когда курсор был далеко
-  // от роадмапа. Теперь ref обновляется бесплатно (без ре-рендера), а
-  // React state трогаем только когда реально наведён шаг (см. ниже).
+
   const pointerRef = useRef({ x: 0, y: 0 });
   const [activeIndex, setActiveIndex] = useState(-1);
   const [energy, setEnergy] = useState(null);
@@ -53,8 +49,6 @@ export default function Roadmap() {
     const el = stepRefs.current[activeIndex];
     if (!el) return;
 
-    // rect считаем один раз при входе в hover, а не на каждый мышемув —
-    // getBoundingClientRect форсирует layout, дёргать его 60 раз/сек не нужно.
     const rect = el.getBoundingClientRect();
     const x1 = rect.left + rect.width / 2;
 

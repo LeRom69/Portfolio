@@ -50,3 +50,13 @@
     animation: none;
   }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  .fog-layer {
+    mix-blend-mode: normal;
+    background: rgba(0, 0, 0, 0.35); 
+  }
+  .fog-layer::after {
+    display: none; 
+  }
+}

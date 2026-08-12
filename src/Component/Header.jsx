@@ -29,13 +29,6 @@ export default function Header() {
     return sessionStorage.getItem("header-shrink") === "true";
   });
 
-  /*
-   * Блокирует автоматическое снятие shrink
-   * во время перехода между страницами.
-   *
-   * Особенно важно при переходе на Home,
-   * когда scrollY может стать 0.
-   */
   const navigationShrinkLock = useRef(false);
 
   const closeTimer = useRef(null);
@@ -79,11 +72,6 @@ export default function Header() {
         "true"
       );
 
-      /*
-       * ВАЖНО:
-       * как только сохраняем shrink перед
-       * переходом — блокируем его снятие.
-       */
       navigationShrinkLock.current = true;
     }
   };
@@ -102,21 +90,10 @@ export default function Header() {
   const handleHeaderLeave = () => {
     setHeaderHover(false);
 
-    /*
-     * Если shrink был заблокирован
-     * переходом — теперь пользователь
-     * реально покинул Header.
-     *
-     * Разрешаем обычную логику снова.
-     */
     if (navigationShrinkLock.current) {
       navigationShrinkLock.current = false;
     }
 
-    /*
-     * Если мы наверху страницы,
-     * после ухода мыши shrink убираем.
-     */
     if (window.scrollY <= 20) {
       setNavigationShrink(false);
 
@@ -152,31 +129,17 @@ export default function Header() {
          * ======================================
          * NAVIGATION LOCK
          * ======================================
-         *
-         * Во время перехода scrollY может
-         * временно стать 0.
-         *
-         * Но shrink нельзя снимать.
          */
         if (navigationShrinkLock.current) {
           setNavigationShrink(true);
           return;
         }
 
-        /*
-         * Скролл вниз включает shrink.
-         */
         if (isScrolled) {
           setNavigationShrink(true);
           return;
         }
 
-        /*
-         * Вернулись наверх.
-         *
-         * Если мышь не на Header —
-         * shrink снимается.
-         */
         if (!headerHover) {
           setNavigationShrink(false);
 
@@ -195,9 +158,6 @@ export default function Header() {
       }
     );
 
-    /*
-     * Начальное состояние.
-     */
     const initialScrolled =
       window.scrollY > 20;
 
@@ -231,10 +191,6 @@ export default function Header() {
         "header-shrink"
       ) === "true";
 
-    /*
-     * Если переход был из shrink —
-     * продолжаем держать shrink.
-     */
     if (wasNavigationShrink) {
       navigationShrinkLock.current = true;
 
@@ -245,9 +201,6 @@ export default function Header() {
      * ======================================
      * HOME
      * ======================================
-     *
-     * После завершения перехода
-     * всегда ставим Home в начало.
      */
     if (location.pathname === "/") {
       requestAnimationFrame(() => {
@@ -257,24 +210,9 @@ export default function Header() {
           behavior: "instant",
         });
 
-        /*
-         * НИЧЕГО НЕ РАЗБЛОКИРУЕМ.
-         *
-         * navigationShrinkLock остаётся true.
-         *
-         * Это важно:
-         * scrollY = 0 не должен снять shrink.
-         */
       });
     }
 
-    /*
-     * Переход уже завершён.
-     *
-     * Саму временную запись можно удалить,
-     * потому что теперь shrink удерживает
-     * navigationShrinkLock.
-     */
     if (wasNavigationShrink) {
       sessionStorage.removeItem(
         "header-shrink"
@@ -340,15 +278,15 @@ export default function Header() {
                 const distance =
                   Math.abs(
                     elementCenter -
-                      viewportCenter
+                    viewportCenter
                   );
 
                 return distance <
                   best.distance
                   ? {
-                      id: entry.target.id,
-                      distance,
-                    }
+                    id: entry.target.id,
+                    distance,
+                  }
                   : best;
               },
               {
@@ -386,51 +324,25 @@ export default function Header() {
    */
 
   const goHome = () => {
-    /*
-     * Сначала блокируем снятие shrink.
-     */
+
     navigationShrinkLock.current = true;
 
-    /*
-     * Сохраняем shrink ДО navigate.
-     */
     preserveShrink();
 
     closeMobile();
-
-    /*
-     * ======================================
-     * УЖЕ НА HOME
-     * ======================================
-     */
 
     if (path === "/") {
       window.scrollTo({
         top: 0,
         left: 0,
-        behavior: "instant",
+        behavior: "smooth",
       });
 
-      /*
-       * Lock НЕ снимаем.
-       *
-       * Он будет снят только тогда,
-       * когда мышь покинет Header.
-       */
     } else {
-      /*
-       * ======================================
-       * ПЕРЕХОД НА HOME
-       * ======================================
-       */
 
       navigate("/", {
         replace: false,
       });
-
-      /*
-       * Lock остаётся true.
-       */
     }
 
     setActiveSection("home");
@@ -450,7 +362,7 @@ export default function Header() {
 
       if (element) {
         element.scrollIntoView({
-          behavior: "instant",
+          behavior: "smooth",
           block: "start",
         });
       }
@@ -612,13 +524,12 @@ export default function Header() {
   return (
     <>
       <div
-        className={`ai-bar ${
-          scroll ||
-          headerHover ||
-          navigationShrink
+        className={`ai-bar ${scroll ||
+            headerHover ||
+            navigationShrink
             ? "shrink"
             : ""
-        }`}
+          }`}
         onMouseEnter={
           handleHeaderEnter
         }
@@ -681,11 +592,10 @@ export default function Header() {
               {t.works}
 
               <svg
-                className={`ai-chevron ${
-                  worksOpen
+                className={`ai-chevron ${worksOpen
                     ? "open"
                     : ""
-                }`}
+                  }`}
                 width="10"
                 height="10"
                 viewBox="0 0 10 10"
@@ -702,21 +612,19 @@ export default function Header() {
             </button>
 
             <div
-              className={`ai-menu ${
-                worksOpen
+              className={`ai-menu ${worksOpen
                   ? "open"
                   : ""
-              }`}
+                }`}
             >
               <span className="ai-menu-line" />
 
               <button
-                className={`dd-item ${
-                  activeSection ===
-                  "uiux-design"
+                className={`dd-item ${activeSection ===
+                    "uiux-design"
                     ? "active"
                     : ""
-                }`}
+                  }`}
                 onClick={() =>
                   goToSection(
                     "uiux-design"
@@ -734,12 +642,11 @@ export default function Header() {
               </span>
 
               <button
-                className={`dd-item ${
-                  activeSection ===
-                  "visual-design"
+                className={`dd-item ${activeSection ===
+                    "visual-design"
                     ? "active"
                     : ""
-                }`}
+                  }`}
                 onClick={() =>
                   goToSection(
                     "visual-design"
@@ -757,12 +664,11 @@ export default function Header() {
               </span>
 
               <button
-                className={`dd-item ${
-                  activeSection ===
-                  "illustrations"
+                className={`dd-item ${activeSection ===
+                    "illustrations"
                     ? "active"
                     : ""
-                }`}
+                  }`}
                 onClick={() =>
                   goToSection(
                     "illustrations"
@@ -803,11 +709,10 @@ export default function Header() {
             onClick={toggle}
           >
             <span
-              className={`lang-pill ${
-                lang === "UA"
+              className={`lang-pill ${lang === "UA"
                   ? "shift"
                   : ""
-              }`}
+                }`}
             />
 
             <span
@@ -836,15 +741,13 @@ export default function Header() {
 
         <button
           ref={burgerRef}
-          className={`ai-burger ${
-            mobileOpen
+          className={`ai-burger ${mobileOpen
               ? "open"
               : ""
-          } ${
-            mobileClosing
+            } ${mobileClosing
               ? "closing"
               : ""
-          }`}
+            }`}
           aria-label="Menu"
           aria-expanded={
             mobileOpen
@@ -861,15 +764,13 @@ export default function Header() {
 
       <div
         ref={drawerRef}
-        className={`ai-drawer ${
-          mobileOpen
+        className={`ai-drawer ${mobileOpen
             ? "open"
             : ""
-        } ${
-          mobileClosing
+          } ${mobileClosing
             ? "closing"
             : ""
-        }`}
+          }`}
         aria-hidden={
           !mobileOpen
         }
@@ -890,11 +791,10 @@ export default function Header() {
         <div className="ai-drawer-line" />
 
         <button
-          className={`ai-drawer-works-toggle ${
-            isWorks
+          className={`ai-drawer-works-toggle ${isWorks
               ? "active"
               : ""
-          }`}
+            }`}
           onClick={() =>
             setMobileWorksOpen(
               (v) => !v
@@ -906,11 +806,10 @@ export default function Header() {
           </span>
 
           <svg
-            className={`ai-drawer-chevron ${
-              mobileWorksOpen
+            className={`ai-drawer-chevron ${mobileWorksOpen
                 ? "open"
                 : ""
-            }`}
+              }`}
             width="10"
             height="10"
             viewBox="0 0 10 10"
@@ -927,16 +826,15 @@ export default function Header() {
         </button>
 
         <div
-          className={`ai-drawer-sub ${
-            mobileWorksOpen
+          className={`ai-drawer-sub ${mobileWorksOpen
               ? "open"
               : ""
-          }`}
+            }`}
         >
           <a
             className={
               activeSection ===
-              "uiux-design"
+                "uiux-design"
                 ? "active"
                 : ""
             }
@@ -954,7 +852,7 @@ export default function Header() {
           <a
             className={
               activeSection ===
-              "visual-design"
+                "visual-design"
                 ? "active"
                 : ""
             }
@@ -972,7 +870,7 @@ export default function Header() {
           <a
             className={
               activeSection ===
-              "illustrations"
+                "illustrations"
                 ? "active"
                 : ""
             }
@@ -1008,11 +906,10 @@ export default function Header() {
         <div className="ai-drawer-line" />
 
         <button
-          className={`ai-drawer-works-toggle ${
-            mobileLinksOpen
+          className={`ai-drawer-works-toggle ${mobileLinksOpen
               ? "active"
               : ""
-          }`}
+            }`}
           onClick={() =>
             setMobileLinksOpen(
               (v) => !v
@@ -1024,11 +921,10 @@ export default function Header() {
           </span>
 
           <svg
-            className={`ai-drawer-chevron ${
-              mobileLinksOpen
+            className={`ai-drawer-chevron ${mobileLinksOpen
                 ? "open"
                 : ""
-            }`}
+              }`}
             width="10"
             height="10"
             viewBox="0 0 10 10"
@@ -1045,11 +941,10 @@ export default function Header() {
         </button>
 
         <div
-          className={`ai-drawer-sub ${
-            mobileLinksOpen
+          className={`ai-drawer-sub ${mobileLinksOpen
               ? "open"
               : ""
-          }`}
+            }`}
         >
           <a
             href="https://www.behance.net/ValeriiaRomanishyna"
@@ -1086,11 +981,10 @@ export default function Header() {
 
         <div className="ai-drawer-lang">
           <button
-            className={`ai-drawer-lang-btn ${
-              lang === "EN"
+            className={`ai-drawer-lang-btn ${lang === "EN"
                 ? "on"
                 : ""
-            }`}
+              }`}
             onClick={() =>
               lang !== "EN" &&
               toggle()
@@ -1100,11 +994,10 @@ export default function Header() {
           </button>
 
           <button
-            className={`ai-drawer-lang-btn ${
-              lang === "UA"
+            className={`ai-drawer-lang-btn ${lang === "UA"
                 ? "on"
                 : ""
-            }`}
+              }`}
             onClick={() =>
               lang !== "UA" &&
               toggle()

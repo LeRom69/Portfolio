@@ -4,13 +4,13 @@ import { useAlignedGrid } from "./useAlignedGrid";
 
 
 export function useGridPointerFx(gridRef, waveClassName) {
-  useAlignedGrid(gridRef); 
+  useAlignedGrid(gridRef);
 
- 
+
   const rectRef = useRef({ left: 0, top: 0, width: 0, height: 0 });
- 
+
   const lastRef = useRef({ x: NaN, y: NaN });
-  
+
   const insideRef = useRef(null);
 
   useEffect(() => {
@@ -36,27 +36,33 @@ export function useGridPointerFx(gridRef, waveClassName) {
     window.addEventListener("resize", scheduleUpdateRect);
     window.addEventListener("scroll", scheduleUpdateRect, { passive: true });
 
-    const threshold = Array.from({ length: 101 }, (_, i) => i / 100);
-    const io = new IntersectionObserver(scheduleUpdateRect, { threshold });
+    let isVisible = false;
+    const io = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      scheduleUpdateRect();
+    }, { threshold: [0, 1] });
     io.observe(el);
+
 
     let raf;
     const loop = () => {
-      const mouse = getPointerState();
-      const { left, top, width, height } = rectRef.current;
-      const x = mouse.x - left;
-      const y = mouse.y - top;
+      if (isVisible) {
+        const mouse = getPointerState();
+        const { left, top, width, height } = rectRef.current;
+        const x = mouse.x - left;
+        const y = mouse.y - top;
 
-      if (x !== lastRef.current.x || y !== lastRef.current.y) {
-        el.style.setProperty("--x", `${x}px`);
-        el.style.setProperty("--y", `${y}px`);
-        lastRef.current = { x, y };
-      }
+        if (x !== lastRef.current.x || y !== lastRef.current.y) {
+          el.style.setProperty("--x", `${x}px`);
+          el.style.setProperty("--y", `${y}px`);
+          lastRef.current = { x, y };
+        }
 
-      const inside = x >= 0 && x <= width && y >= 0 && y <= height;
-      if (inside !== insideRef.current) {
-        el.classList.toggle("pointer-inside", inside);
-        insideRef.current = inside;
+        const inside = x >= 0 && x <= width && y >= 0 && y <= height;
+        if (inside !== insideRef.current) {
+          el.classList.toggle("pointer-inside", inside);
+          insideRef.current = inside;
+        }
       }
 
       raf = requestAnimationFrame(loop);
