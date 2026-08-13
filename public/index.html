@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark only" />
     <meta name="theme-color" content="#020617" />
+    <meta name="darkreader-lock" />
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/sprite/logo.svg" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
+    <!-- Подавляем ResizeObserver до загрузки бандла -->
     <script>
       window.addEventListener('error', function(e) {
         if (e.message && e.message.indexOf('ResizeObserver loop') !== -1) {

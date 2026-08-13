@@ -445,12 +445,3 @@
         animation: none;
     }
 }
-
-@media (hover: none) and (pointer: coarse) {
-  .creation-card::before,
-  .image-card::before,
-  .image-inner::before,
-  .image-inner::after {
-    animation-play-state: paused;
-  }
-}
