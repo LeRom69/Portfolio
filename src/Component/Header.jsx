@@ -525,10 +525,10 @@ export default function Header() {
     <>
       <div
         className={`ai-bar ${scroll ||
-            headerHover ||
-            navigationShrink
-            ? "shrink"
-            : ""
+          headerHover ||
+          navigationShrink
+          ? "shrink"
+          : ""
           }`}
         onMouseEnter={
           handleHeaderEnter
@@ -591,39 +591,33 @@ export default function Header() {
             >
               {t.works}
 
-              <svg
+              <img
                 className={`ai-chevron ${worksOpen
-                    ? "open"
-                    : ""
+                  ? "open"
+                  : ""
                   }`}
-                width="10"
-                height="10"
-                viewBox="0 0 10 10"
-              >
-                <path
-                  d="M2 3.5L5 6.5L8 3.5"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+                style={{
+                  width: "8px",
+                  height: "10px"
+                }}
+                src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`}
+                alt="VR Logo"
+              />
             </button>
 
             <div
               className={`ai-menu ${worksOpen
-                  ? "open"
-                  : ""
+                ? "open"
+                : ""
                 }`}
             >
               <span className="ai-menu-line" />
 
               <button
                 className={`dd-item ${activeSection ===
-                    "uiux-design"
-                    ? "active"
-                    : ""
+                  "uiux-design"
+                  ? "active"
+                  : ""
                   }`}
                 onClick={() =>
                   goToSection(
@@ -643,9 +637,9 @@ export default function Header() {
 
               <button
                 className={`dd-item ${activeSection ===
-                    "visual-design"
-                    ? "active"
-                    : ""
+                  "visual-design"
+                  ? "active"
+                  : ""
                   }`}
                 onClick={() =>
                   goToSection(
@@ -665,9 +659,9 @@ export default function Header() {
 
               <button
                 className={`dd-item ${activeSection ===
-                    "illustrations"
-                    ? "active"
-                    : ""
+                  "illustrations"
+                  ? "active"
+                  : ""
                   }`}
                 onClick={() =>
                   goToSection(
@@ -710,8 +704,8 @@ export default function Header() {
           >
             <span
               className={`lang-pill ${lang === "UA"
-                  ? "shift"
-                  : ""
+                ? "shift"
+                : ""
                 }`}
             />
 
@@ -742,8 +736,8 @@ export default function Header() {
         <button
           ref={burgerRef}
           className={`ai-burger ${mobileOpen
-              ? "open"
-              : ""
+            ? "open"
+            : ""
             } ${mobileClosing
               ? "closing"
               : ""
@@ -765,8 +759,8 @@ export default function Header() {
       <div
         ref={drawerRef}
         className={`ai-drawer ${mobileOpen
-            ? "open"
-            : ""
+          ? "open"
+          : ""
           } ${mobileClosing
             ? "closing"
             : ""
@@ -792,8 +786,8 @@ export default function Header() {
 
         <button
           className={`ai-drawer-works-toggle ${isWorks
-              ? "active"
-              : ""
+            ? "active"
+            : ""
             }`}
           onClick={() =>
             setMobileWorksOpen(
@@ -805,30 +799,25 @@ export default function Header() {
             {t.works}
           </span>
 
-          <svg
-            className={`ai-drawer-chevron ${mobileWorksOpen
-                ? "open"
-                : ""
+          <img
+            className={`ai-chevron ${mobileWorksOpen 
+              ? "open"
+              : ""
               }`}
-            width="10"
-            height="10"
-            viewBox="0 0 10 10"
-          >
-            <path
-              d="M2 3.5L5 6.5L8 3.5"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+            style={{
+              width: "8px",
+              height: "10px"
+            }}
+            src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`}
+            alt="VR Logo"
+          />
+
         </button>
 
         <div
           className={`ai-drawer-sub ${mobileWorksOpen
-              ? "open"
-              : ""
+            ? "open"
+            : ""
             }`}
         >
           <a
@@ -907,8 +896,8 @@ export default function Header() {
 
         <button
           className={`ai-drawer-works-toggle ${mobileLinksOpen
-              ? "active"
-              : ""
+            ? "active"
+            : ""
             }`}
           onClick={() =>
             setMobileLinksOpen(
@@ -920,30 +909,24 @@ export default function Header() {
             {t.links}
           </span>
 
-          <svg
-            className={`ai-drawer-chevron ${mobileLinksOpen
-                ? "open"
-                : ""
+          <img
+            className={`ai-chevron ${mobileLinksOpen  
+              ? "open"
+              : ""
               }`}
-            width="10"
-            height="10"
-            viewBox="0 0 10 10"
-          >
-            <path
-              d="M2 3.5L5 6.5L8 3.5"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+            style={{
+              width: "8px",
+              height: "10px"
+            }}
+            src={`${process.env.PUBLIC_URL}/sprites/icons/arrow.svg`}
+            alt="VR Logo"
+          />
         </button>
 
         <div
           className={`ai-drawer-sub ${mobileLinksOpen
-              ? "open"
-              : ""
+            ? "open"
+            : ""
             }`}
         >
           <a
@@ -982,8 +965,8 @@ export default function Header() {
         <div className="ai-drawer-lang">
           <button
             className={`ai-drawer-lang-btn ${lang === "EN"
-                ? "on"
-                : ""
+              ? "on"
+              : ""
               }`}
             onClick={() =>
               lang !== "EN" &&
@@ -995,8 +978,8 @@ export default function Header() {
 
           <button
             className={`ai-drawer-lang-btn ${lang === "UA"
-                ? "on"
-                : ""
+              ? "on"
+              : ""
               }`}
             onClick={() =>
               lang !== "UA" &&

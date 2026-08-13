@@ -37,7 +37,8 @@ button,
   z-index: 9999;
   top: 3px;
   left: 50%;
-  transform: translateX(-50%) scale(0.98);
+  transform: translate3d(-50%, 0, 0) scale(0.98);
+  will-change: transform;
 
   width: calc(100% - 32px);
   height: 56px;
@@ -50,13 +51,16 @@ button,
   justify-content: space-between;
   gap: 8px;
 
-  transition: all 0.4s cubic-bezier(.2, .9, .2, 1);
+  transition:
+    transform 0.4s cubic-bezier(.2, .9, .2, 1),
+    width 0.4s cubic-bezier(.2, .9, .2, 1),
+    height 0.4s cubic-bezier(.2, .9, .2, 1);
 }
 
 .ai-bar.shrink {
   top: 2px;
   height: 52px;
-  transform: translateX(-50%) scale(1);
+  transform: translate3d(-50%, 0, 0) scale(1);
 
   width: 99%;
 
@@ -67,6 +71,7 @@ button,
     0 1px 0 rgba(255, 255, 255, 0.08) inset,
     0 25px 70px rgba(0, 0, 0, 0.55);
 }
+
 
 /* =========================
    LEFT
@@ -248,10 +253,11 @@ button,
 .ai-chevron {
   transition: 0.25s ease;
   opacity: 0.6;
+  transform: rotate(-180deg);
 }
 
 .ai-chevron.open {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
   opacity: 1;
 }
 
@@ -1095,6 +1101,12 @@ button,
   }
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .ai-bar.shrink {
+    backdrop-filter: blur(8px);
+  }
+}
+
 /* =========================
    DISABLE ANIMATION ::after
 ========================= */
@@ -1107,9 +1119,12 @@ button,
   animation: none !important;
 }
 
-/* на всякий случай убираем hover-активацию */
 .dd-item:hover::after {
   opacity: 0 !important;
   transform: none !important;
   animation: none !important;
+}
+
+body.is-scrolling .ai-bar.shrink {
+  backdrop-filter: none;
 }

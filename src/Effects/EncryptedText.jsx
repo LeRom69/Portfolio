@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 const CHARS = "!@#$*%&?";
 
@@ -30,11 +30,17 @@ function wrapText(text, maxLen) {
 export default function EncryptedText({
   text = "",
   lines = null,
-  speed = 60,
+  speed,
+  baseSpeed = 60,
   variance = 700,
   anchorIndex = 0,
   maxLineLength = null,
 }) {
+  // Тик "мерцания" должен всегда быть быстрым независимо от того,
+  // что передано в speed/baseSpeed — иначе при tick > variance все
+  // символы раскрываются разом на первом же тике (нет анимации).
+  const effectiveSpeed = Math.min(speed ?? baseSpeed, 60);
+
   const effectiveLines =
     lines || (maxLineLength ? wrapText(text, maxLineLength) : null);
 
@@ -42,25 +48,28 @@ export default function EncryptedText({
     ? effectiveLines.join("\n")
     : text;
 
-  const buildChars = (str) =>
-    str.split("").map((ch, i) => ({
-      ch,
-      encrypted: randChar(),
-
-      revealed:
-        ch === "\n" ||
-        ch === " " ||
-        i === anchorIndex,
-    }));
-
   const ref = useRef(null);
   const intervalRef = useRef(null);
+
+  const buildChars = useCallback(
+    (str) =>
+      str.split("").map((ch, i) => ({
+        ch,
+        encrypted: randChar(),
+
+        revealed:
+          ch === "\n" ||
+          ch === " " ||
+          i === anchorIndex,
+      })),
+    [anchorIndex]
+  );
 
   const [chars, setChars] = useState(() =>
     buildChars(fullText)
   );
 
-  const startAnimation = () => {
+  const startAnimation = useCallback(() => {
     clearInterval(intervalRef.current);
 
     const start = performance.now();
@@ -105,12 +114,12 @@ export default function EncryptedText({
 
         return next;
       });
-    }, speed);
-  };
+    }, effectiveSpeed);
+  }, [fullText, variance, effectiveSpeed, anchorIndex, buildChars]);
 
   useEffect(() => {
     setChars(buildChars(fullText));
-  }, [fullText]);
+  }, [fullText, buildChars]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -134,7 +143,7 @@ export default function EncryptedText({
       observer.disconnect();
       clearInterval(intervalRef.current);
     };
-  }, [fullText, speed, variance]);
+  }, [startAnimation]);
 
   const renderChar = (c, i) => (
     <span
@@ -162,31 +171,6 @@ export default function EncryptedText({
         }}
       >
         {c.revealed ? c.ch : c.encrypted}
-      </span>
-    </span>
-  );
-
-  const renderSpace = (c, i) => (
-    <span
-      key={i}
-      style={{
-        display: "inline-block",
-        position: "relative",
-        whiteSpace: "nowrap",
-      }}
-    >
-      <span style={{ visibility: "hidden" }}>
-        {"\u00A0"}
-      </span>
-
-      <span
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-        }}
-      >
-        {"\u00A0"}
       </span>
     </span>
   );
@@ -247,7 +231,7 @@ export default function EncryptedText({
 
     return output;
   };
-  
+
   return (
     <span
       ref={ref}
@@ -259,4 +243,3 @@ export default function EncryptedText({
     </span>
   );
 }
-

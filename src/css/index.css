@@ -26,7 +26,7 @@
 
 :root,
 html {
-  color-scheme: dark only;
+  color-scheme: only dark;
 }
 
 :root {
@@ -445,7 +445,7 @@ h1.title {
   text-transform: uppercase;
   -webkit-text-stroke: clamp(1.5px, 0.6vw, 8px) white;
   margin: 0;
-  margin-bottom: clamp(16px, 3vw, 20px);
+  margin-bottom: 4px;
   position: relative;
   z-index: 999;
   white-space: pre-line;
@@ -787,7 +787,7 @@ h4.sect-subtitle.img {
   .about-container {
     padding: 8px calc(1.5 * (var(--gutter)));
     ;
-    padding-top: 140px;
+    padding-top: 120px;
   }
 
   .about-photo {
@@ -817,12 +817,12 @@ h4.sect-subtitle.img {
   }
 
   .hero-content-wrapper {
-    padding: 26px 28px;
+    padding: 36px 28px;
   }
 
   .about-container {
     padding: 8px calc(1.5 * (var(--gutter)));
-    padding-top: 62px;
+    padding-top: 30px;
   }
 
   .creations-container {
@@ -897,12 +897,6 @@ h4.sect-subtitle.img {
     padding: 8px calc(1.5 * (var(--gutter)));
     padding-top: 40px;
   }
-
-  .about-container {
-    padding: 8px calc(1.5 * (var(--gutter)));
-    padding-top: 46px;
-  }
-
 
   h3.co-title {
     width: 50%;

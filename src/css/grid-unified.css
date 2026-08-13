@@ -50,20 +50,12 @@
   --cell: clamp(57.3px, calc(8 * var(--vw140)), 110px);
   --edge: clamp(18px, calc(4.2 * var(--vw140)), 59px);
 
-  /* граница hero-зоны, выставляется JS-ом (ResizeObserver по реальной
-     высоте hero). Используется __h-lines (статика) и обоими
-     псевдоэлементами __glow (подсветка курсора). */
   --main-h: 100vh;
 
   --x: var(--px);
   --y: var(--py);
 }
 
-/* =========================
-   🌌 ВЕРТИКАЛЬНЫЕ ЛИНИИ — БАЗА
-   Один непрерывный background на всю высоту — вертикальная сетка ниже
-   hero является физическим продолжением этих же линий, без обрыва.
-========================= */
 .grid-unified::before {
   content: "";
   position: absolute;
@@ -97,9 +89,6 @@
   }
 }
 
-/* =========================
-   🎯 ГОРИЗОНТАЛЬНЫЕ ЛИНИИ + ТОЧКИ (статика, только в hero-зоне)
-========================= */
 .grid-unified__h-lines {
   position: absolute;
   inset: 0;
@@ -228,6 +217,12 @@
   }
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .grid-unified__h-lines::after {
+    display: none;
+  }
+}
+
 /* =========================
    ⚡ WAVE
 ========================= */
@@ -304,4 +299,13 @@
   100% {
     opacity: 0.75;
   }
+}
+
+body.is-scrolling .grid-unified__glow {
+  opacity: 0 !important;
+  transition: none !important;
+}
+
+body.is-scrolling .grid-unified__h-lines::after {
+  display: none;
 }

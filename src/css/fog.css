@@ -60,3 +60,11 @@
     display: none; 
   }
 }
+
+body.is-scrolling .fog-layer {
+  mix-blend-mode: normal;
+}
+
+body.is-scrolling .fog-layer::after {
+  opacity: 0;
+}

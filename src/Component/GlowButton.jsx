@@ -128,12 +128,6 @@ export default function GlowButton({ children = "Get Started", onClick }) {
             <mpath href={`#p-${uid}`} />
           </animateMotion>
         </circle>
-
-        <circle r="1.5" fill="#fff">
-          <animateMotion dur="2.5s" repeatCount="indefinite">
-            <mpath href={`#p-${uid}`} />
-          </animateMotion>
-        </circle>
       </svg>
 
       <span className="glow-btn-text">{children}</span>
