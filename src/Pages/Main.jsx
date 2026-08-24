@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from "react";
 
 import Fog from "../Effects/Fog";
 import GlowButton from "../Component/GlowButton";
+import GlowButtonDefs from "../Component/GlowButtonDefs";
 import GlowMarquee from "../Component/GlowMarquee";
 
 import Card from "../Card/Card";
@@ -116,17 +117,17 @@ export default function App() {
 
   const spotlightPropsAbout = isMobile
     ? {
-        fill: "#9492ba27",
-        top: "-180px",
-        left: "-120px",
-        length: "950",
-      }
+      fill: "#9492ba27",
+      top: "-180px",
+      left: "-120px",
+      length: "950",
+    }
     : {
-        fill: "#9492ba27",
-        top: "-200px",
-        left: "-120px",
-        length: "1000",
-      };
+      fill: "#9492ba27",
+      top: "-200px",
+      left: "-120px",
+      length: "1000",
+    };
 
   // ----------------------------------------
   // RENDER
@@ -134,6 +135,7 @@ export default function App() {
 
   return (
     <div className="container">
+      <GlowButtonDefs />
       <Fog />
 
       <Header />
@@ -353,11 +355,10 @@ export default function App() {
                   <span>
                     U
                     <EncryptedText
-                      text={`I/UX ${
-                        lang === "UA"
+                      text={`I/UX ${lang === "UA"
                           ? "Дизайн"
                           : "Design"
-                      }`}
+                        }`}
                       variance={520}
                       baseSpeed={1200}
                     />

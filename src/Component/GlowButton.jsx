@@ -69,40 +69,10 @@ export default function GlowButton({ children = "Get Started", onClick }) {
         preserveAspectRatio="none"
       >
         <defs>
-          <linearGradient id={`eg-${uid}`} x1="0" y1="0" x2="1" y2="0">
-            {[
-              ["0%",   "#DEE4FD", "-0.2;0;0.2" ],
-              ["33%",  "#f0b5ff", "0.2;0.4;0.6"],
-              ["66%",  "#ea96ff", "0.4;0.6;0.8"],
-              ["100%", "#34369e", "0.6;0.8;1"  ],      
-            ].map(([off, color, vals]) => (
-              <stop key={off} offset={off} stopColor={color}>
-                <animate attributeName="offset" values={vals} dur="2s" repeatCount="indefinite" />
-              </stop>
-            ))}
-          </linearGradient>
-
-          <filter id={`glow-${uid}`} x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-
-          <filter id={`spark-${uid}`} x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="3" />
-          </filter>
-
-          <radialGradient id={`fade-${uid}`}>
-            <stop offset="0%"   stopColor="white" stopOpacity="1" />
-            <stop offset="60%"  stopColor="white" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
-          </radialGradient>
-
+          {/* Только маска — она уникальна для каждой кнопки, т.к. движется по её собственному пути */}
           <mask id={`mask-${uid}`}>
             <rect width="100%" height="100%" fill="black" />
-            <circle r="60" fill={`url(#fade-${uid})`}>
+            <circle r="60" fill="url(#glow-btn-fade)">
               <animateMotion dur="2.5s" repeatCount="indefinite">
                 <mpath href={`#p-${uid}`} />
               </animateMotion>
@@ -117,13 +87,13 @@ export default function GlowButton({ children = "Get Started", onClick }) {
         <path
           d={d}
           fill="none"
-          stroke={`url(#eg-${uid})`}
+          stroke="url(#glow-btn-eg)"
           strokeWidth="3"
-          filter={`url(#glow-${uid})`}
+          filter="url(#glow-btn-glow)"
           mask={`url(#mask-${uid})`}
         />
 
-        <circle r="5" fill="#fff" filter={`url(#spark-${uid})`}>
+        <circle r="5" fill="#fff" filter="url(#glow-btn-spark)">
           <animateMotion dur="2.5s" repeatCount="indefinite">
             <mpath href={`#p-${uid}`} />
           </animateMotion>

@@ -13,16 +13,23 @@ export function useAlignedGrid(ref) {
     };
 
     const getCanonicalWidth = () => {
-
       return (
         document.documentElement.clientWidth ||
         el.getBoundingClientRect().width
       );
     };
 
+    let lastWidth = null;
+
     const recalc = () => {
       const width = getCanonicalWidth();
       if (!width) return;
+
+      // На мобильных resize стреляет и от скрытия/показа адресной строки —
+      // при этом меняется только высота. Пересчитываем сетку только
+      // если реально изменилась ширина.
+      if (width === lastWidth) return;
+      lastWidth = width;
 
       const gutter = readPx("--gutter", 58);
       const desiredCell = readPx("--cell-target", 110);

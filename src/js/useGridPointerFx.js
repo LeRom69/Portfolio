@@ -2,20 +2,23 @@ import { useEffect, useRef } from "react";
 import { getPointerState } from "./useGlobalPointer";
 import { useAlignedGrid } from "./useAlignedGrid";
 
-
 export function useGridPointerFx(gridRef, waveClassName) {
   useAlignedGrid(gridRef);
 
-
   const rectRef = useRef({ left: 0, top: 0, width: 0, height: 0 });
-
   const lastRef = useRef({ x: NaN, y: NaN });
-
   const insideRef = useRef(null);
 
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
+
+    // На устройствах без реального курсора (touch) этот эффект бесполезен —
+    // pointer всегда 0,0/последнее значение, а сам rAF-луп + scroll/resize
+    // листенеры продолжают дёргать стили во время скролла, вызывая
+    // лаги и мигание. Просто не подключаем эффект.
+    const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    if (isCoarsePointer) return;
 
     const updateRect = () => {
       rectRef.current = el.getBoundingClientRect();
@@ -42,7 +45,6 @@ export function useGridPointerFx(gridRef, waveClassName) {
       scheduleUpdateRect();
     }, { threshold: [0, 1] });
     io.observe(el);
-
 
     let raf;
     const loop = () => {

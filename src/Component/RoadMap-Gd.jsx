@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "../css/roadmap.css";
 
 import GlowButton from "../Component/GlowButton";
+import GlowButtonDefs from "../Component/GlowButtonDefs";
 import { subscribePointer, initPointer } from "../js/pointerStore";
 
 import { useLang } from "../Languages/LanguageContext";
@@ -66,7 +67,7 @@ export default function Roadmap() {
   return (
     <div className="roadmap">
       <div className="roadmap-line" />
-
+      <GlowButtonDefs />
       {energy && (
         <div
           className={`roadmap-energy ${energy.visible ? "active" : ""}`}

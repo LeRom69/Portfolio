@@ -136,6 +136,10 @@
   mask-composite: intersect;
 
   background: rgba(164, 164, 209, 0);
+
+  opacity: 1;
+  transition: opacity 0.35s ease-out;
+  will-change: opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -155,6 +159,7 @@
 
   opacity: 0;
   transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity;
 }
 
 .grid-unified__glow::before {
@@ -303,9 +308,10 @@
 
 body.is-scrolling .grid-unified__glow {
   opacity: 0 !important;
-  transition: none !important;
+  transition: opacity 0.35s ease-out !important;
 }
 
 body.is-scrolling .grid-unified__h-lines::after {
-  display: none;
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
 }
