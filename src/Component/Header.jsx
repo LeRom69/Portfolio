@@ -950,12 +950,12 @@ export default function Header() {
           </a>
 
           <a
-            href="mailto:v.designer007591@gmail.com"
+            href="https://www.youtube.com/@v.reverie69"
             target="_blank"
             rel="noopener noreferrer"
           >
             <span>
-              Email
+              YouTube
             </span>
           </a>
         </div>

@@ -757,11 +757,11 @@ export default function ContactSection() {
           <div className="contact-right">
             <div className="bubble bubble-1">
               <a
-                href="mailto:v.designer007591@gmail.com"
+                href="https://www.youtube.com/@v.reverie69"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                EMAIL
+                YouTube
               </a>
             </div>
 
